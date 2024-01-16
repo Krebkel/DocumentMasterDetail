@@ -1,0 +1,6 @@
+@DocumentMasterDetail_HostAddress = http://localhost:5116
+
+GET {{DocumentMasterDetail_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
