@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ErrorLogs")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eee087439b22e5b075611265e84797800146f4b5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6f8bb4538f2fe2b5e097426dc887ce7384ac4250")]
 [assembly: System.Reflection.AssemblyProductAttribute("ErrorLogs")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ErrorLogs")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

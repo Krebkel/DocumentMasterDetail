@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "lJEVCdOS7U1UGojvHVjl1etb/xH1H4RcgtigiUhb0KtXJqeOlZK5koEkMgzwuk5IIQx7H1J9cgHEq/pAcaylhQ==",
-  "success": false,
+  "dgSpecHash": "Z1qmWqx6PBqJepvV7eAoJepyPU4sRzq9504TDxI4fovxE0GuK/h2lW693PsIXYtJM6EOY/aJCE3Hy6hiBV4vQA==",
+  "success": true,
   "projectFilePath": "/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Web/Web.csproj",
   "expectedPackageFiles": [
     "/Users/castro/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
@@ -68,10 +68,10 @@
     "/Users/castro/.nuget/packages/runtime.native.system/4.0.0/runtime.native.system.4.0.0.nupkg.sha512",
     "/Users/castro/.nuget/packages/runtime.native.system.net.http/4.0.1/runtime.native.system.net.http.4.0.1.nupkg.sha512",
     "/Users/castro/.nuget/packages/runtime.native.system.security.cryptography/4.0.0/runtime.native.system.security.cryptography.4.0.0.nupkg.sha512",
-    "/Users/castro/.nuget/packages/swashbuckle.aspnetcore/6.4.0/swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
-    "/Users/castro/.nuget/packages/swashbuckle.aspnetcore.swagger/6.4.0/swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
-    "/Users/castro/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.4.0/swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
-    "/Users/castro/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.4.0/swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512",
+    "/Users/castro/.nuget/packages/swashbuckle.aspnetcore/6.5.0/swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "/Users/castro/.nuget/packages/swashbuckle.aspnetcore.swagger/6.5.0/swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "/Users/castro/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.5.0/swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "/Users/castro/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.5.0/swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
     "/Users/castro/.nuget/packages/system.appcontext/4.1.0/system.appcontext.4.1.0.nupkg.sha512",
     "/Users/castro/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",
     "/Users/castro/.nuget/packages/system.collections/4.3.0/system.collections.4.3.0.nupkg.sha512",
@@ -202,51 +202,6 @@
       "warningLevel": 1,
       "message": "Detected package version outside of dependency constraint: Microsoft.Build.Utilities.Core 15.3.409 requires Microsoft.Build.Framework (= 15.3.409) but version Microsoft.Build.Framework 17.8.3 was resolved.",
       "libraryId": "Microsoft.Build.Framework",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: Swashbuckle.AspNetCore from 6.5.0 to 6.4.0. Reference the package directly from the project to select a different version. \n Web -> Contracts -> Swashbuckle.AspNetCore (>= 6.5.0) \n Web -> Swashbuckle.AspNetCore (>= 6.4.0)",
-      "libraryId": "Swashbuckle.AspNetCore",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: Swashbuckle.AspNetCore from 6.5.0 to 6.4.0. Reference the package directly from the project to select a different version. \n Web -> Data -> Swashbuckle.AspNetCore (>= 6.5.0) \n Web -> Swashbuckle.AspNetCore (>= 6.4.0)",
-      "libraryId": "Swashbuckle.AspNetCore",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: Swashbuckle.AspNetCore from 6.5.0 to 6.4.0. Reference the package directly from the project to select a different version. \n Web -> ErrorLogs -> Swashbuckle.AspNetCore (>= 6.5.0) \n Web -> Swashbuckle.AspNetCore (>= 6.4.0)",
-      "libraryId": "Swashbuckle.AspNetCore",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: Swashbuckle.AspNetCore from 6.5.0 to 6.4.0. Reference the package directly from the project to select a different version. \n Web -> Invoices -> Swashbuckle.AspNetCore (>= 6.5.0) \n Web -> Swashbuckle.AspNetCore (>= 6.4.0)",
-      "libraryId": "Swashbuckle.AspNetCore",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: Swashbuckle.AspNetCore from 6.5.0 to 6.4.0. Reference the package directly from the project to select a different version. \n Web -> Positions -> Swashbuckle.AspNetCore (>= 6.5.0) \n Web -> Swashbuckle.AspNetCore (>= 6.4.0)",
-      "libraryId": "Swashbuckle.AspNetCore",
       "targetGraphs": [
         "net8.0"
       ]
