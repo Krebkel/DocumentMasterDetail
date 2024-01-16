@@ -10,3 +10,9 @@
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/refint/Positions.dll
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.pdb
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/ref/Positions.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/bin/Debug/net8.0/Contracts.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/bin/Debug/net8.0/Data.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/bin/Debug/net8.0/Contracts.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/bin/Debug/net8.0/Data.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.csproj.AssemblyReference.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.csproj.CopyComplete

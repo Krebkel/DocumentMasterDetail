@@ -10,3 +10,9 @@
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/obj/Debug/net8.0/refint/ErrorLogs.dll
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/obj/Debug/net8.0/ErrorLogs.pdb
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/obj/Debug/net8.0/ref/ErrorLogs.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/bin/Debug/net8.0/Contracts.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/bin/Debug/net8.0/Data.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/bin/Debug/net8.0/Contracts.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/bin/Debug/net8.0/Data.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/obj/Debug/net8.0/ErrorLogs.csproj.AssemblyReference.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/ErrorLogs/obj/Debug/net8.0/ErrorLogs.csproj.CopyComplete

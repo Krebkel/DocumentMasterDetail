@@ -10,3 +10,9 @@
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/refint/Invoices.dll
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.pdb
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/ref/Invoices.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/bin/Debug/net8.0/Contracts.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/bin/Debug/net8.0/Data.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/bin/Debug/net8.0/Contracts.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/bin/Debug/net8.0/Data.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.csproj.AssemblyReference.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.csproj.CopyComplete
