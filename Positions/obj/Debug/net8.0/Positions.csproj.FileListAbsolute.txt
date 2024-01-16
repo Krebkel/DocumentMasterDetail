@@ -1,0 +1,12 @@
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/bin/Debug/net8.0/Positions.deps.json
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/bin/Debug/net8.0/Positions.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/bin/Debug/net8.0/Positions.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.GeneratedMSBuildEditorConfig.editorconfig
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.AssemblyInfoInputs.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.AssemblyInfo.cs
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.csproj.CoreCompileInputs.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.sourcelink.json
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/refint/Positions.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/Positions.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/obj/Debug/net8.0/ref/Positions.dll

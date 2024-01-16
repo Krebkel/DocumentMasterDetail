@@ -1,0 +1,12 @@
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/bin/Debug/net8.0/Contracts.deps.json
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/bin/Debug/net8.0/Contracts.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/bin/Debug/net8.0/Contracts.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/Contracts.GeneratedMSBuildEditorConfig.editorconfig
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/Contracts.AssemblyInfoInputs.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/Contracts.AssemblyInfo.cs
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/Contracts.csproj.CoreCompileInputs.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/Contracts.sourcelink.json
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/Contracts.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/refint/Contracts.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/Contracts.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Contracts/obj/Debug/net8.0/ref/Contracts.dll
