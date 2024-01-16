@@ -1,0 +1,12 @@
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/bin/Debug/net8.0/Invoices.deps.json
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/bin/Debug/net8.0/Invoices.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/bin/Debug/net8.0/Invoices.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.GeneratedMSBuildEditorConfig.editorconfig
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.AssemblyInfoInputs.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.AssemblyInfo.cs
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.csproj.CoreCompileInputs.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.sourcelink.json
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/refint/Invoices.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/Invoices.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Invoices/obj/Debug/net8.0/ref/Invoices.dll
