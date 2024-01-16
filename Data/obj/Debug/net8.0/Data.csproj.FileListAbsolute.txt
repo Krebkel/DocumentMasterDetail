@@ -24,3 +24,13 @@
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/obj/Debug/net8.0/Data.dll
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/obj/Debug/net8.0/refint/Data.dll
 /Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/obj/Debug/net8.0/Data.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/bin/Debug/net8.0/Data.deps.json
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/bin/Debug/net8.0/Data.runtimeconfig.json
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/bin/Debug/net8.0/Data.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/bin/Debug/net8.0/Data.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/bin/Debug/net8.0/Contracts.dll
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/bin/Debug/net8.0/Contracts.pdb
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/obj/Debug/net8.0/Data.csproj.AssemblyReference.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/obj/Debug/net8.0/Data.csproj.CopyComplete
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/obj/Debug/net8.0/Data.genruntimeconfig.cache
+/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Data/obj/Debug/net8.0/ref/Data.dll

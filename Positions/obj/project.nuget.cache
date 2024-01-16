@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+l4YQCkfhPPTD1PX9f/rx4Y3tB+h3pFEnMr2qWg+EeOyJ1BLN8nGhhIOpOWaDm5aBEVdMmoKouuPQA0bYWLTYA==",
+  "dgSpecHash": "AO9IK5jMnz+FYqBIsC9f0/r0v8KRMeOdyTkWU1vgUS61WxtMMvkaDDqfXucEcyz8+qbDFGhU3/rq6bA6YDh3ZA==",
   "success": true,
   "projectFilePath": "/Users/castro/Documents/Rider/DocumentMasterDetail/DocumentMasterDetail/Positions/Positions.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "/Users/castro/.nuget/packages/microsoft.entityframeworkcore.abstractions/8.0.1/microsoft.entityframeworkcore.abstractions.8.0.1.nupkg.sha512",
     "/Users/castro/.nuget/packages/microsoft.entityframeworkcore.analyzers/8.0.1/microsoft.entityframeworkcore.analyzers.8.0.1.nupkg.sha512",
     "/Users/castro/.nuget/packages/microsoft.entityframeworkcore.relational/8.0.1/microsoft.entityframeworkcore.relational.8.0.1.nupkg.sha512",
+    "/Users/castro/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/castro/.nuget/packages/microsoft.extensions.caching.abstractions/8.0.0/microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
     "/Users/castro/.nuget/packages/microsoft.extensions.caching.memory/8.0.0/microsoft.extensions.caching.memory.8.0.0.nupkg.sha512",
     "/Users/castro/.nuget/packages/microsoft.extensions.configuration/8.0.0/microsoft.extensions.configuration.8.0.0.nupkg.sha512",

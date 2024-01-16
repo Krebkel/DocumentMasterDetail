@@ -1,44 +1,57 @@
+using Data;
+using ErrorLogs;
+using Invoices;
+using Positions;
+using Microsoft.Net.Http.Headers;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()!;
+
+builder.Services
+    .AddControllers();
+
+builder.Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen(setup =>
+    {
+        // Swagger
+    });
+
+builder.Services
+    .Configure<DataOptions>(builder.Configuration.GetSection("Postgres"));
+
+builder.Services
+    .AddPostgresData();
+
+builder.Services
+    .AddPostgresErrorLogs();
+
+builder.Services
+    .AddPostgresInvoices();
+
+builder.Services
+    .AddPostgresPositions();
+
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Swagger UI и HealthChecks
 
-app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseEndpoints(e => e.MapControllers());
 
-app.MapGet("/weatherforecast", () =>
+// Swagger UI
+
+app.UseDefaultFiles()
+    .UseStaticFiles(new StaticFileOptions
     {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
+        OnPrepareResponse = context =>
+        {
+            var headers = context.Context.Response.GetTypedHeaders();
+            headers.CacheControl = new CacheControlHeaderValue { Public = true, MaxAge = TimeSpan.FromMinutes(1) };
+        }
+    });
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
