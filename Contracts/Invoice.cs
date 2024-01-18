@@ -11,17 +11,17 @@ public class Invoice : DatabaseEntity
     /// <summary>
     /// Номер документа
     /// </summary>
-    public string? Number { get; set; }
+    public required string Number { get; set; }
 
     /// <summary>
     /// Дата проведения
     /// </summary>
-    public DateTime? Date { get; set; }
+    public required DateTimeOffset Date { get; set; }
 
     /// <summary>
     /// Сумма по документу
     /// </summary>
-    public decimal? TotalAmount { get; set; }
+    public required decimal TotalAmount { get; set; }
 
     /// <summary>
     /// Примечание
@@ -31,5 +31,5 @@ public class Invoice : DatabaseEntity
     /// <summary>
     /// Позиции документа
     /// </summary>
-    public List<Position>? Positions { get; set; }
+    public required List<Position> Positions { get; set; }
 }

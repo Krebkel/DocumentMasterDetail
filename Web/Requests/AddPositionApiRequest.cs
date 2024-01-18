@@ -1,6 +1,6 @@
 using Contracts;
 
-namespace Positions.Requests;
+namespace Web.Requests;
 
 public class AddPositionApiRequest
 {

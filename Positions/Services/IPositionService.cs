@@ -26,8 +26,8 @@ public class UpdatePositionRequest
 
 public class CreatePositionRequest
 {
-    public string? Name { get; set; }
-    public decimal? Quantity { get; set; }
-    public decimal? Value { get; set; }
-    public Invoice? Invoice { get; set; }
+    public required string Name { get; set; }
+    public required decimal Quantity { get; set; }
+    public required decimal Value { get; set; }
+    public required Invoice Invoice { get; set; }
 }

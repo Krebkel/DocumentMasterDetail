@@ -11,10 +11,7 @@ builder.Services
 
 builder.Services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen(setup =>
-    {
-        // Swagger
-    });
+    .AddSwaggerGen();
 
 builder.Services
     .Configure<DataOptions>(builder.Configuration.GetSection("Postgres"));
@@ -41,6 +38,8 @@ var app = builder.Build();
 app.UseEndpoints(e => e.MapControllers());
 
 // Swagger UI
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseDefaultFiles()
     .UseStaticFiles(new StaticFileOptions

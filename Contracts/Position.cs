@@ -8,20 +8,20 @@ public class Position : DatabaseEntity
     /// <summary>
     /// Наименование
     /// </summary>
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Количество
     /// </summary>
-    public decimal? Quantity { get; set; }
+    public required decimal Quantity { get; set; }
 
     /// <summary>
     /// Сумма
     /// </summary>
-    public decimal? Value { get; set; }
+    public required decimal Value { get; set; }
 
     /// <summary>
     /// Документ
     /// </summary>
-    public Invoice? Invoice { get; set; }
+    public required Invoice Invoice { get; set; }
 }

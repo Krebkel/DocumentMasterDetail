@@ -43,10 +43,17 @@ public class PositionService : IPositionService
         }
 
         // Обновление свойств позиции
-        existingPosition.Name = request.Name;
-        existingPosition.Quantity = request.Quantity;
-        existingPosition.Value = request.Value;
-        existingPosition.Invoice = request.Invoice;
+        if (request.Name != null)
+            existingPosition.Name = request.Name;
+        
+        if (request.Quantity.HasValue)
+            existingPosition.Quantity = request.Quantity.Value;
+        
+        if (request.Value.HasValue)
+            existingPosition.Value = request.Value.Value;
+        
+        if (request.Invoice != null)
+            existingPosition.Invoice = request.Invoice;
 
         await _dbContext.SaveChangesAsync(ct);
 

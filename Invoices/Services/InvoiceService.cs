@@ -1,8 +1,9 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Contracts;
 using Data;
+using ErrorLogs.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace Invoices.Services;
 
@@ -10,14 +11,17 @@ public class InvoiceService : IInvoiceService
 {
     private readonly AppDbContext _dbContext;
     private readonly ILogger<InvoiceService> _logger;
+    private readonly IErrorLogService _errorLogService;
 
-    public InvoiceService(AppDbContext dbContext, ILogger<InvoiceService> logger)
+    public InvoiceService(AppDbContext dbContext, ILogger<InvoiceService> logger, IErrorLogService errorLogService)
     {
         _dbContext = dbContext;
         _logger = logger;
+        _errorLogService = errorLogService;
     }
 
-    public async Task<Invoice> CreateInvoiceAsync(CreateInvoiceRequest request, CancellationToken cancellationToken)
+    public async Task<InvoiceCreationResult> CreateInvoiceAsync(CreateInvoiceRequest request,
+        CancellationToken cancellationToken)
     {
         var createdInvoice = new Invoice
         {
@@ -27,14 +31,28 @@ public class InvoiceService : IInvoiceService
             Positions = request.Positions
         };
 
-        _dbContext.Invoices.Add(createdInvoice);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.Invoices.AddAsync(createdInvoice, cancellationToken);
 
-        _logger.LogInformation("Документ успешно добавлен: {@Invoice}", createdInvoice);
-        return createdInvoice;
+        try
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException e)
+            when (e.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+        {
+            var errorRequest = new CreateErrorLogRequest
+            {
+                Date = request.Date,
+                Note = $"{createdInvoice.Id} - {createdInvoice.Number}"
+            };
+            await _errorLogService.CreateErrorLogAsync(errorRequest, cancellationToken);
+            return InvoiceCreationResult.Error("Причина ошибки добавления");
+        }
+
+        return InvoiceCreationResult.Success(createdInvoice);
     }
 
-    public async Task UpdateInvoiceAsync(UpdateInvoiceRequest request, CancellationToken ct)
+    public async Task UpdateInvoiceAsync(UpdateInvoiceRequest request, CancellationToken cancellationToken)
     {
         var existingInvoice = await _dbContext.Invoices.FindAsync(request.Id);
 
@@ -44,12 +62,19 @@ public class InvoiceService : IInvoiceService
             return;
         }
 
-        existingInvoice.Number = request.Number;
-        existingInvoice.Date = request.Date;
-        existingInvoice.TotalAmount = request.TotalAmount;
-        existingInvoice.Positions = request.Positions;
+        if (request.Number != null)
+            existingInvoice.Number = request.Number;
 
-        await _dbContext.SaveChangesAsync(ct);
+        if (request.Date.HasValue)
+            existingInvoice.Date = request.Date.Value;
+
+        if (request.TotalAmount.HasValue)
+            existingInvoice.TotalAmount = request.TotalAmount.Value;
+
+        if (request.Positions != null)
+            existingInvoice.Positions = request.Positions;
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Документ успешно обновлен: {@Invoice}", existingInvoice);
     }

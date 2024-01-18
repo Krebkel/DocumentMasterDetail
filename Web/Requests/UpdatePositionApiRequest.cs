@@ -1,6 +1,6 @@
 using Contracts;
 
-namespace Positions.Requests;
+namespace Web.Requests;
 
 public class UpdatePositionApiRequest
 {
@@ -27,5 +27,5 @@ public class UpdatePositionApiRequest
     /// <summary>
     /// Документ
     /// </summary>
-    public Invoice Invoice { get; set; }
+    public Invoice? Invoice { get; set; }
 }

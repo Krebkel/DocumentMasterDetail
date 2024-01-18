@@ -7,11 +7,23 @@ public static class InvoiceExtension
 {
     public static CreateInvoiceRequest ToAddInvoiceRequest(this AddInvoiceApiRequest apiRequest)
     {
-        return new CreateInvoiceRequest();
+        return new CreateInvoiceRequest
+        {
+            Number = apiRequest.Number,
+            Date = apiRequest.Date,
+            TotalAmount = apiRequest.TotalAmount,
+            Positions = apiRequest.Positions
+        };
     }
 
-    public static UpdateInvoiceRequest ToUpdateInvoiceRequest(this UpdateInvoiceApiRequest request)
+    public static UpdateInvoiceRequest ToUpdateInvoiceRequest(this UpdateInvoiceApiRequest apiRequest)
     {
-        return new UpdateInvoiceRequest();
+        return new UpdateInvoiceRequest
+        {
+            Number = apiRequest.Number,
+            Date = apiRequest.Date,
+            TotalAmount = apiRequest.TotalAmount,
+            Positions = apiRequest.Positions
+        };
     }
 }

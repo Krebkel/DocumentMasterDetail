@@ -1,5 +1,3 @@
-using System.Threading;
-using System.Threading.Tasks;
 using Contracts;
 using Data;
 using Microsoft.Extensions.Logging;
@@ -28,7 +26,7 @@ public class ErrorLogService : IErrorLogService
         _dbContext.ErrorLogs.Add(createdErrorLog);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Документ успешно добавлен: {@ErrorLog}", createdErrorLog);
+        _logger.LogInformation("Лог ошибки успешно добавлен: {@ErrorLog}", createdErrorLog);
         return createdErrorLog;
     }
 }

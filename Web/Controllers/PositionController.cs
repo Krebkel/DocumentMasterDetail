@@ -1,6 +1,6 @@
 using Contracts;
-using Positions.Extensions;
-using Positions.Requests;
+using Web.Extensions;
+using Web.Requests;
 using Positions.Services;
 using Microsoft.AspNetCore.Mvc;
 
