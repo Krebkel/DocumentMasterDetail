@@ -1,6 +1,6 @@
 using Contracts;
-using Invoices.Extensions;
-using Invoices.Requests;
+using Web.Extensions;
+using Web.Requests;
 using Invoices.Services;
 using Microsoft.AspNetCore.Mvc;
 
