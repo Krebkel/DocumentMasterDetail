@@ -6,8 +6,6 @@ using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()!;
-
 builder.Services
     .AddControllers();
 

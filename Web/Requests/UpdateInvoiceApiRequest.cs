@@ -1,17 +1,18 @@
-using System;
-using System.Collections.Generic;
+using Contracts;
 
-namespace Contracts;
+namespace Web.Requests;
 
-/// <summary>
-/// Документ Master
-/// </summary>
-public class Invoice : DatabaseEntity
+public class UpdateInvoiceApiRequest
 {
+    /// <summary>
+    /// Идентификатор документа
+    /// </summary>
+    public int Id { get; set; }
+
     /// <summary>
     /// Номер документа
     /// </summary>
-    public string? Number { get; set; }
+    public string Number { get; set; }
 
     /// <summary>
     /// Дата проведения
