@@ -1,27 +1,27 @@
 using Contracts;
 
-namespace Invoices.Services;
+namespace Positions.Services;
 
-public class InvoiceCreationResult
+public class PositionCreationResult
 {
     public required bool IsSuccess { get; init; }
-    
+
     public string? StatusMessage { get; init; }
 
-    public Invoice Result { get; init; }
+    public Position Result { get; init; }
 
-    public static InvoiceCreationResult Error(string message)
+    public static PositionCreationResult Error(string message)
     {
-        return new InvoiceCreationResult
+        return new PositionCreationResult
         {
             IsSuccess = false,
             StatusMessage = message
         };
     }
-    
-    public static InvoiceCreationResult Success(Invoice result, string? message = null)
+
+    public static PositionCreationResult Success(Position result, string? message = null)
     {
-        return new InvoiceCreationResult
+        return new PositionCreationResult
         {
             IsSuccess = true,
             Result = result,

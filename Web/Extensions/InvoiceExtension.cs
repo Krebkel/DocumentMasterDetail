@@ -16,7 +16,7 @@ public static class InvoiceExtension
         };
     }
 
-    public static UpdateInvoiceRequest ToUpdateInvoiceRequest(this UpdateInvoiceApiRequest apiRequest)
+    public static UpdateInvoiceRequest ToUpdateInvoiceRequest(this UpdateInvoiceApiRequest apiRequest, int id)
     {
         return new UpdateInvoiceRequest
         {

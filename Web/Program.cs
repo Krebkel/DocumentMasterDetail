@@ -33,9 +33,11 @@ builder.Services.AddHealthChecks();
 var app = builder.Build();
 
 // Swagger UI и HealthChecks
-
-
-app.UseEndpoints(e => e.MapControllers());
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 // Swagger UI
 app.UseSwagger();

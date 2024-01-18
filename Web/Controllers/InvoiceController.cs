@@ -23,12 +23,14 @@ public class InvoiceController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Invoice))]
     public async Task<IActionResult> AddInvoice([FromBody] AddInvoiceApiRequest apiRequest, CancellationToken ct)
     {
-        // TODO: возвращать результат действия и не завязываться на ексепшн. Ексепшн ловить только в случае ошибок
         try
         {
             var addInvoiceRequest = apiRequest.ToAddInvoiceRequest();
             var createdInvoice = await _invoiceService.CreateInvoiceAsync(addInvoiceRequest, ct);
-            return Ok(createdInvoice);
+            // Возвращаем HTTP 201 Created и созданный объект Invoice
+            return CreatedAtAction(nameof(GetInvoice), new { id = createdInvoice.Result.Id }, 
+                createdInvoice);
+
         }
         catch (Exception e)
         {
@@ -37,12 +39,12 @@ public class InvoiceController : ControllerBase
         }
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateInvoice([FromBody] UpdateInvoiceApiRequest request, CancellationToken ct)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateInvoice(int id, [FromBody] UpdateInvoiceApiRequest request, CancellationToken ct)
     {
         try
         {
-            var updateInvoiceRequest = request.ToUpdateInvoiceRequest();
+            var updateInvoiceRequest = request.ToUpdateInvoiceRequest(id);
             await _invoiceService.UpdateInvoiceAsync(updateInvoiceRequest, ct);
             return Ok();
         }
@@ -50,6 +52,39 @@ public class InvoiceController : ControllerBase
         {
             _logger.LogError(e, "Ошибка при обновлении документа");
             return BadRequest($"Ошибка при обновлении документа {e.Message}");
+        }
+    }
+    
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Invoice))]
+    public async Task<IActionResult> GetInvoice(int id)
+    {
+        try
+        {
+            var invoice = await _invoiceService.GetInvoiceAsync(id);
+
+            return Ok(invoice);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Ошибка при получении документа");
+            return BadRequest($"Ошибка при получении документа {e.Message}");
+        }
+    }
+    
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteInvoice(int id, CancellationToken ct)
+    {
+        try
+        {
+            await _invoiceService.DeleteInvoiceAsync(id, ct);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Ошибка при удалении документа");
+            return BadRequest($"Ошибка при удалении документа {e.Message}");
         }
     }
 }

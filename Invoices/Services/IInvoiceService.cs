@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Contracts;
 
 namespace Invoices.Services;
@@ -17,11 +13,21 @@ public interface IInvoiceService
     /// Обновить документ
     /// </summary>
     Task UpdateInvoiceAsync(UpdateInvoiceRequest invoice, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// Получить документ
+    /// </summary>
+    Task<Invoice> GetInvoiceAsync(int id);
+    
+    /// <summary>
+    /// Удалить документ
+    /// </summary>
+    Task DeleteInvoiceAsync(int id, CancellationToken cancellationToken);
 }
 
 public class UpdateInvoiceRequest
 {
-    public int Id { get; set; }
+    public int Id { get; }
     public string? Number { get; set; }
     public DateTimeOffset? Date { get; set; }
     public decimal? TotalAmount { get; set; }
@@ -30,6 +36,7 @@ public class UpdateInvoiceRequest
 
 public class CreateInvoiceRequest
 {
+    public int Id { get; set; }
     public string Number { get; set; }
     public DateTimeOffset Date { get; set; }
     public decimal TotalAmount { get; set; }

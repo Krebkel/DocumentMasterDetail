@@ -46,7 +46,7 @@ public class InvoiceService : IInvoiceService
                 Note = $"{createdInvoice.Id} - {createdInvoice.Number}"
             };
             await _errorLogService.CreateErrorLogAsync(errorRequest, cancellationToken);
-            return InvoiceCreationResult.Error("Причина ошибки добавления");
+            return InvoiceCreationResult.Error("Ошибка добавления");
         }
 
         return InvoiceCreationResult.Success(createdInvoice);
@@ -78,4 +78,25 @@ public class InvoiceService : IInvoiceService
 
         _logger.LogInformation("Документ успешно обновлен: {@Invoice}", existingInvoice);
     }
+    
+    public async Task<Invoice> GetInvoiceAsync(int id)
+    {
+        return await _dbContext.Invoices.FindAsync(id);
+    }
+    
+    public async Task DeleteInvoiceAsync(int id, CancellationToken cancellationToken)
+{
+    var existingInvoice = await _dbContext.Invoices.FindAsync(id);
+
+    if (existingInvoice == null)
+    {
+        _logger.LogWarning("Документ с Id {InvoiceId} не найден.", id);
+        return;
+    }
+
+    _dbContext.Invoices.Remove(existingInvoice);
+    await _dbContext.SaveChangesAsync(cancellationToken);
+
+    _logger.LogInformation("Документ успешно удален: {@Invoice}", existingInvoice);
+}
 }
