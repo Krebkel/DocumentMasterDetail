@@ -12,18 +12,18 @@ public static class PositionExtension
             Name = apiRequest.Name,
             Quantity = apiRequest.Quantity,
             Value = apiRequest.Value,
-            Invoice = apiRequest.Invoice
+            InvoiceId = apiRequest.InvoiceId
         };
     }
 
-    public static UpdatePositionRequest ToUpdatePositionRequest(this UpdatePositionApiRequest apiRequest)
+    public static UpdatePositionRequest ToUpdatePositionRequest(this UpdatePositionApiRequest apiRequest, int id)
     {
         return new UpdatePositionRequest
         {
+            Id = id,
             Name = apiRequest.Name,
             Quantity = apiRequest.Quantity,
-            Value = apiRequest.Value,
-            Invoice = apiRequest.Invoice
+            Value = apiRequest.Value
         };
     }
 }

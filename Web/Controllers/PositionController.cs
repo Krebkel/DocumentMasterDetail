@@ -23,7 +23,6 @@ public class PositionController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Position))]
     public async Task<IActionResult> AddPosition([FromBody] AddPositionApiRequest apiRequest, CancellationToken ct)
     {
-        // TODO: возвращать результат действия и не завязываться на ексепшн. Ексепшн ловить только в случае ошибок
         try
         {
             var addPositionRequest = apiRequest.ToAddPositionRequest();
@@ -37,12 +36,12 @@ public class PositionController : ControllerBase
         }
     }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdatePosition([FromBody] UpdatePositionApiRequest request, CancellationToken ct)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdatePosition(int id, [FromBody] UpdatePositionApiRequest request, CancellationToken ct)
     {
         try
         {
-            var updatePositionRequest = request.ToUpdatePositionRequest();
+            var updatePositionRequest = request.ToUpdatePositionRequest(id);
             await _positionService.UpdatePositionAsync(updatePositionRequest, ct);
             return Ok();
         }
@@ -50,6 +49,38 @@ public class PositionController : ControllerBase
         {
             _logger.LogError(e, "Ошибка при обновлении позиции");
             return BadRequest($"Ошибка при обновлении позиции {e.Message}");
+        }
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetPositionsByInvoiceId(int id)
+    {
+        try
+        {
+            var position = await _positionService.GetPositionsByInvoiceIdAsync(id);
+
+            return Ok(position);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Ошибка при получении позиций");
+            return BadRequest($"Ошибка при получении позиций {e.Message}");
+        }
+    }
+    
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeletePosition(int id, CancellationToken ct)
+    {
+        try
+        {
+            await _positionService.DeletePositionAsync(id, ct);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Ошибка при удалении позиции");
+            return BadRequest($"Ошибка при удалении позиции {e.Message}");
         }
     }
 }

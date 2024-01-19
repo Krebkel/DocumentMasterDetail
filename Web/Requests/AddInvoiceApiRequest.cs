@@ -1,5 +1,3 @@
-using Contracts;
-
 namespace Web.Requests;
 
 public class AddInvoiceApiRequest

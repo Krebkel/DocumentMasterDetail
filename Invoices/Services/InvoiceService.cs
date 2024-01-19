@@ -39,12 +39,18 @@ public class InvoiceService : IInvoiceService
         catch (DbUpdateException e)
             when (e.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
         {
-            var errorRequest = new CreateErrorLogRequest
+            _dbContext.Invoices.Remove(createdInvoice);
+            
+            var createdErrorLog = new ErrorLog
             {
-                Date = request.Date,
-                Note = $"{createdInvoice.Id} - {createdInvoice.Number}"
+                Date = DateTimeOffset.UtcNow,
+                Note = $"Ошибка добавления нового документа. Документ №{createdInvoice.Number} от уже существует!"
             };
-            await _errorLogService.CreateErrorLogAsync(errorRequest, cancellationToken);
+
+            await _dbContext.ErrorLogs.AddAsync(createdErrorLog, cancellationToken);
+            
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
             return InvoiceCreationResult.Error("Ошибка добавления");
         }
 
@@ -72,25 +78,23 @@ public class InvoiceService : IInvoiceService
         _logger.LogInformation("Документ успешно обновлен: {@InvoiceNumber}", existingInvoice.Number);
     }
 
-    public async Task<Invoice> GetInvoiceAsync(string number)
+    public async Task<Invoice[]> GetAllInvoicesAsync()
     {
-        return await _dbContext.Invoices.FindAsync(number);
+        return await _dbContext.Invoices.ToArrayAsync();
     }
 
-    public async Task<List<Invoice>> GetAllInvoicesAsync()
+    public async Task<Position[]> GetAllPositionsForInvoiceAsync(string invoiceNumber)
     {
-        return await _dbContext.Invoices.ToListAsync();
-    }
-
-    public async Task<List<Position>> GetAllPositionsForInvoiceAsync(string invoiceNumber)
-    {
-        var positions = await _dbContext.Positions.Where(p => p.Invoice.Number.Equals(invoiceNumber)).ToListAsync();
+        var positions = await _dbContext.Positions
+            .Where(p => p.Invoice.Number.Equals(invoiceNumber))
+            .ToArrayAsync();
         return positions;
     }
 
     public async Task DeleteInvoiceAsync(string number, CancellationToken cancellationToken)
     {
-        var existingInvoice = await _dbContext.Invoices.FindAsync(number);
+        var existingInvoice = await _dbContext.Invoices
+            .FirstOrDefaultAsync(i => i.Number == number);
 
         if (existingInvoice == null)
         {

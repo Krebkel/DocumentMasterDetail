@@ -5,11 +5,6 @@ namespace Web.Requests;
 public class AddPositionApiRequest
 {
     /// <summary>
-    /// Идентификатор позиции
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
     /// Наименование
     /// </summary>
     public required string Name { get; set; }
@@ -25,7 +20,7 @@ public class AddPositionApiRequest
     public required decimal Value { get; set; }
 
     /// <summary>
-    /// Документ
+    /// ID документа
     /// </summary>
-    public required Invoice Invoice { get; set; }
+    public required int InvoiceId { get; set; }
 }

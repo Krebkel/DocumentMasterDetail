@@ -15,19 +15,9 @@ public interface IInvoiceService
     Task UpdateInvoiceAsync(UpdateInvoiceRequest invoice, CancellationToken cancellationToken);
     
     /// <summary>
-    /// Получить документ
-    /// </summary>
-    Task<Invoice> GetInvoiceAsync(string number);
-
-    /// <summary>
-    /// Получить все позиции для документа
-    /// </summary>
-    Task<List<Position>> GetAllPositionsForInvoiceAsync(string invoiceNumber);
-
-    /// <summary>
     /// Получить все документы
     /// </summary>
-    Task<List<Invoice>> GetAllInvoicesAsync();
+    Task<Invoice[]> GetAllInvoicesAsync();
     
     /// <summary>
     /// Удалить документ

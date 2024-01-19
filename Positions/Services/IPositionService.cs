@@ -13,11 +13,6 @@ public interface IPositionService
     /// Обновить позицию
     /// </summary>
     Task UpdatePositionAsync(UpdatePositionRequest position, CancellationToken ct);
-    
-    /// <summary>
-    /// Получить позицию
-    /// </summary>
-    Task<Position> GetPositionAsync(int id);
 
     /// <summary>
     /// Удалить позицию
@@ -27,8 +22,7 @@ public interface IPositionService
     /// <summary>
     /// Получить список позиций по Id документа
     /// </summary>
-    Task<List<Position>> GetPositionsByInvoiceIdAsync(int invoiceId);
-
+    Task<Position[]> GetPositionsByInvoiceIdAsync(int invoiceId);
 }
 
 public class UpdatePositionRequest
@@ -37,7 +31,6 @@ public class UpdatePositionRequest
     public string? Name { get; set; }
     public decimal? Quantity { get; set; }
     public decimal? Value { get; set; }
-    public Invoice? Invoice { get; set; }
 }
 
 public class CreatePositionRequest
@@ -45,5 +38,5 @@ public class CreatePositionRequest
     public required string Name { get; set; }
     public required decimal Quantity { get; set; }
     public required decimal Value { get; set; }
-    public required Invoice Invoice { get; set; }
+    public required int InvoiceId { get; set; }
 }

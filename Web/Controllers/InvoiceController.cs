@@ -53,7 +53,7 @@ public class InvoiceController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
     public async Task<IActionResult> GetAllInvoices()
     {
         try
@@ -69,7 +69,7 @@ public class InvoiceController : ControllerBase
         }
     }
     
-    [HttpDelete("{number}")]
+    [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteInvoice(string number, CancellationToken ct)
     {

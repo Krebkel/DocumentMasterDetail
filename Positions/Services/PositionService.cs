@@ -1,9 +1,7 @@
 using Contracts;
 using Data;
-using ErrorLogs.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 
 namespace Positions.Services;
 
@@ -11,44 +9,36 @@ public class PositionService : IPositionService
 {
     private readonly AppDbContext _dbContext;
     private readonly ILogger<PositionService> _logger;
-    private readonly IErrorLogService _errorLogService;
 
-    public PositionService(AppDbContext dbContext, ILogger<PositionService> logger, IErrorLogService errorLogService)
+    public PositionService(AppDbContext dbContext, ILogger<PositionService> logger)
     {
         _dbContext = dbContext;
         _logger = logger;
-        _errorLogService = errorLogService;
     }
 
     public async Task<PositionCreationResult> CreatePositionAsync(CreatePositionRequest request, 
         CancellationToken cancellationToken)
     {
+        var invoice = await _dbContext.Invoices.FirstOrDefaultAsync(i => i.Id == request.InvoiceId, 
+            cancellationToken: cancellationToken);
+        
+        if (invoice == null)
+        {
+            return PositionCreationResult.Error("Ошибка добавления позиции. Документ не найден!");
+        }
+        
         var createdPosition = new Position
         {
             Name = request.Name,
             Quantity = request.Quantity,
             Value = request.Value,
-            Invoice = request.Invoice
+            Invoice = invoice
         };
 
         await _dbContext.Positions.AddAsync(createdPosition, cancellationToken);
 
-        try
-        {
-            await _dbContext.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException e)
-            when (e.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
-        {
-            var errorRequest = new CreateErrorLogRequest
-            {
-                Date = DateTimeOffset.Now,
-                Note = $"{createdPosition.Id} - {createdPosition.Name}"
-            };
-            await _errorLogService.CreateErrorLogAsync(errorRequest, cancellationToken);
-            return PositionCreationResult.Error("Ошибка добавления");
-        }
-        
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
         return PositionCreationResult.Success(createdPosition);
     }
 
@@ -71,22 +61,15 @@ public class PositionService : IPositionService
         
         if (request.Value.HasValue)
             existingPosition.Value = request.Value.Value;
-        
-        if (request.Invoice != null)
-            existingPosition.Invoice = request.Invoice;
 
         await _dbContext.SaveChangesAsync(ct);
 
         _logger.LogInformation("Позиция успешно обновлена: {@Position}", existingPosition);
     }
+    
     public async Task<Position> GetPositionAsync(int id)
     {
-        return await _dbContext.Positions.FindAsync(id);
-    }
-    
-    public async Task<List<Position>> GetAllPositionsAsync()
-    {
-        return await _dbContext.Positions.ToListAsync();
+        return await _dbContext.Positions.FirstAsync(p => p.Id == id);
     }
 
     public async Task DeletePositionAsync(int id, CancellationToken cancellationToken)
@@ -105,8 +88,11 @@ public class PositionService : IPositionService
         _logger.LogInformation("Позиция успешно удалена: {@Position}", existingPosition);
     }
 
-    public async Task<List<Position>> GetPositionsByInvoiceIdAsync(int invoiceId)
+    public async Task<Position[]> GetPositionsByInvoiceIdAsync(int invoiceId)
     {
-        return await _dbContext.Positions.Where(p => p.Invoice.Id == invoiceId).ToListAsync();
+        return await _dbContext.Positions
+            .Include(p => p.Invoice)
+            .Where(p => p.Invoice.Id == invoiceId)
+            .ToArrayAsync();
     }
 }

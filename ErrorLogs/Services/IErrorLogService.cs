@@ -15,6 +15,7 @@ public interface IErrorLogService
 
 public class CreateErrorLogRequest
 {
+    public int Id { get; set; }
     public DateTimeOffset Date { get; set; }
     public string? Note { get; set; }
 }
