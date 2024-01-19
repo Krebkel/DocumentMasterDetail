@@ -1,6 +1,0 @@
-@DocumentMasterDetail_HostAddress = http://localhost:80
-
-GET {{DocumentMasterDetail_HostAddress}}/index.html/
-Accept: application/json
-
-###

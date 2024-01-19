@@ -24,6 +24,14 @@
             background-color: #f5f5f5;
             cursor: pointer;
         }
+
+        .action-buttons {
+            display: flex;
+        }
+
+        .action-buttons button {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -35,6 +43,7 @@
         <th>Дата</th>
         <th>Сумма</th>
         <th>Примечание</th>
+        <th>Действия</th>
     </tr>
     </thead>
     <tbody>
@@ -59,13 +68,25 @@
         fetch('http://localhost/api/invoices')
             .then(response => response.json())
             .then(data => {
-                // Handle the data and populate the invoices table
                 const invoicesTableBody = document.getElementById('invoicesTable').getElementsByTagName('tbody')[0];
                 invoicesTableBody.innerHTML = '';
 
                 data.forEach(invoice => {
                     const row = invoicesTableBody.insertRow();
                     row.innerHTML = `<td>${invoice.number}</td><td>${invoice.date}</td><td>${invoice.totalAmount}</td><td>${invoice.note}</td>`;
+
+                    // Кнопки "Изменить" и "Удалить"
+                    const actionsCell = row.insertCell();
+                    const updateButton = document.createElement('button');
+                    updateButton.textContent = 'Изменить';
+                    updateButton.addEventListener('click', () => updateInvoice(invoice.id));
+                    actionsCell.appendChild(updateButton);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Удалить';
+                    deleteButton.addEventListener('click', () => deleteInvoice(invoice.id));
+                    actionsCell.appendChild(deleteButton);
+
                     row.addEventListener('click', () => fetchPositions(invoice.id));
                 });
             })
@@ -115,7 +136,13 @@
             return false;
         }
 
+        fetchInvoices();  // После удаления обновляем таблицу документов
         return true;
+    }
+
+    function updateInvoice(id) {
+        // Обновление документа
+        console.log(`Update Invoice with ID: ${id}`);
     }
 
     // Первичный фетч документов
