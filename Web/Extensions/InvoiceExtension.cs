@@ -11,8 +11,7 @@ public static class InvoiceExtension
         {
             Number = apiRequest.Number,
             Date = apiRequest.Date,
-            TotalAmount = apiRequest.TotalAmount,
-            Positions = apiRequest.Positions
+            Note = apiRequest.Note
         };
     }
 
@@ -22,8 +21,7 @@ public static class InvoiceExtension
         {
             Number = apiRequest.Number,
             Date = apiRequest.Date,
-            TotalAmount = apiRequest.TotalAmount,
-            Positions = apiRequest.Positions
+            Note = apiRequest.Note
         };
     }
 }

@@ -17,12 +17,7 @@ public class UpdateInvoiceApiRequest
     /// <summary>
     /// Дата проведения
     /// </summary>
-    public DateTime? Date { get; set; }
-
-    /// <summary>
-    /// Сумма по документу
-    /// </summary>
-    public decimal? TotalAmount { get; set; }
+    public DateTimeOffset? Date { get; set; }
 
     /// <summary>
     /// Примечание

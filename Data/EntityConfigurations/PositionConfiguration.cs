@@ -15,7 +15,7 @@ internal class PositionConfiguration : IEntityTypeConfiguration<Position>
         builder.Property(position => position.Value).IsRequired();
 
         builder.HasOne(position => position.Invoice)
-            .WithMany(invoice => invoice.Positions)
+            .WithMany()
             .IsRequired();
     }
 }

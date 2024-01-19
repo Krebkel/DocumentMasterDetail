@@ -83,6 +83,11 @@ public class PositionService : IPositionService
     {
         return await _dbContext.Positions.FindAsync(id);
     }
+    
+    public async Task<List<Position>> GetAllPositionsAsync()
+    {
+        return await _dbContext.Positions.ToListAsync();
+    }
 
     public async Task DeletePositionAsync(int id, CancellationToken cancellationToken)
     {

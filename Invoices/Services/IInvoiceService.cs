@@ -17,12 +17,22 @@ public interface IInvoiceService
     /// <summary>
     /// Получить документ
     /// </summary>
-    Task<Invoice> GetInvoiceAsync(int id);
+    Task<Invoice> GetInvoiceAsync(string number);
+
+    /// <summary>
+    /// Получить все позиции для документа
+    /// </summary>
+    Task<List<Position>> GetAllPositionsForInvoiceAsync(string invoiceNumber);
+
+    /// <summary>
+    /// Получить все документы
+    /// </summary>
+    Task<List<Invoice>> GetAllInvoicesAsync();
     
     /// <summary>
     /// Удалить документ
     /// </summary>
-    Task DeleteInvoiceAsync(int id, CancellationToken cancellationToken);
+    Task DeleteInvoiceAsync(string number, CancellationToken cancellationToken);
 }
 
 public class UpdateInvoiceRequest
@@ -30,8 +40,8 @@ public class UpdateInvoiceRequest
     public int Id { get; }
     public string? Number { get; set; }
     public DateTimeOffset? Date { get; set; }
-    public decimal? TotalAmount { get; set; }
-    public List<Position>? Positions { get; set; }
+    public string? Note { get; set; }
+
 }
 
 public class CreateInvoiceRequest
@@ -39,6 +49,5 @@ public class CreateInvoiceRequest
     public int Id { get; set; }
     public string Number { get; set; }
     public DateTimeOffset Date { get; set; }
-    public decimal TotalAmount { get; set; }
-    public List<Position> Positions { get; set; }
+    public string Note { get; set; }
 }

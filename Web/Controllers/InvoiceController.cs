@@ -27,9 +27,7 @@ public class InvoiceController : ControllerBase
         {
             var addInvoiceRequest = apiRequest.ToAddInvoiceRequest();
             var createdInvoice = await _invoiceService.CreateInvoiceAsync(addInvoiceRequest, ct);
-            // Возвращаем HTTP 201 Created и созданный объект Invoice
-            return CreatedAtAction(nameof(GetInvoice), new { id = createdInvoice.Result.Id }, 
-                createdInvoice);
+            return Ok(createdInvoice);
 
         }
         catch (Exception e)
@@ -54,14 +52,13 @@ public class InvoiceController : ControllerBase
             return BadRequest($"Ошибка при обновлении документа {e.Message}");
         }
     }
-    
+
     [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Invoice))]
-    public async Task<IActionResult> GetInvoice(int id)
+    public async Task<IActionResult> GetAllInvoices()
     {
         try
         {
-            var invoice = await _invoiceService.GetInvoiceAsync(id);
+            var invoice = await _invoiceService.GetAllInvoicesAsync();
 
             return Ok(invoice);
         }
@@ -72,13 +69,13 @@ public class InvoiceController : ControllerBase
         }
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete("{number}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> DeleteInvoice(int id, CancellationToken ct)
+    public async Task<IActionResult> DeleteInvoice(string number, CancellationToken ct)
     {
         try
         {
-            await _invoiceService.DeleteInvoiceAsync(id, ct);
+            await _invoiceService.DeleteInvoiceAsync(number, ct);
             return Ok();
         }
         catch (Exception e)

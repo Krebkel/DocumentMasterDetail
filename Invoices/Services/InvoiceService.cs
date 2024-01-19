@@ -27,8 +27,7 @@ public class InvoiceService : IInvoiceService
         {
             Number = request.Number,
             Date = request.Date,
-            TotalAmount = request.TotalAmount,
-            Positions = request.Positions
+            Note = request.Note
         };
 
         await _dbContext.Invoices.AddAsync(createdInvoice, cancellationToken);
@@ -54,11 +53,11 @@ public class InvoiceService : IInvoiceService
 
     public async Task UpdateInvoiceAsync(UpdateInvoiceRequest request, CancellationToken cancellationToken)
     {
-        var existingInvoice = await _dbContext.Invoices.FindAsync(request.Id);
+        var existingInvoice = await _dbContext.Invoices.FindAsync(request.Number);
 
         if (existingInvoice == null)
         {
-            _logger.LogWarning("Документ с Id {InvoiceId} не найден.", request.Id);
+            _logger.LogWarning("Документ с номером {InvoiceNumber} не найден.", request.Number);
             return;
         }
 
@@ -68,35 +67,40 @@ public class InvoiceService : IInvoiceService
         if (request.Date.HasValue)
             existingInvoice.Date = request.Date.Value;
 
-        if (request.TotalAmount.HasValue)
-            existingInvoice.TotalAmount = request.TotalAmount.Value;
-
-        if (request.Positions != null)
-            existingInvoice.Positions = request.Positions;
-
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Документ успешно обновлен: {@Invoice}", existingInvoice);
+        _logger.LogInformation("Документ успешно обновлен: {@InvoiceNumber}", existingInvoice.Number);
     }
-    
-    public async Task<Invoice> GetInvoiceAsync(int id)
+
+    public async Task<Invoice> GetInvoiceAsync(string number)
     {
-        return await _dbContext.Invoices.FindAsync(id);
+        return await _dbContext.Invoices.FindAsync(number);
     }
-    
-    public async Task DeleteInvoiceAsync(int id, CancellationToken cancellationToken)
-{
-    var existingInvoice = await _dbContext.Invoices.FindAsync(id);
 
-    if (existingInvoice == null)
+    public async Task<List<Invoice>> GetAllInvoicesAsync()
     {
-        _logger.LogWarning("Документ с Id {InvoiceId} не найден.", id);
-        return;
+        return await _dbContext.Invoices.ToListAsync();
     }
 
-    _dbContext.Invoices.Remove(existingInvoice);
-    await _dbContext.SaveChangesAsync(cancellationToken);
+    public async Task<List<Position>> GetAllPositionsForInvoiceAsync(string invoiceNumber)
+    {
+        var positions = await _dbContext.Positions.Where(p => p.Invoice.Number.Equals(invoiceNumber)).ToListAsync();
+        return positions;
+    }
 
-    _logger.LogInformation("Документ успешно удален: {@Invoice}", existingInvoice);
-}
+    public async Task DeleteInvoiceAsync(string number, CancellationToken cancellationToken)
+    {
+        var existingInvoice = await _dbContext.Invoices.FindAsync(number);
+
+        if (existingInvoice == null)
+        {
+            _logger.LogWarning("Документ с номером {InvoiceNumber} не найден.", number);
+            return;
+        }
+
+        _dbContext.Invoices.Remove(existingInvoice);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Документ успешно удален: {@InvoiceNumber}", existingInvoice.Number);
+    }
 }
