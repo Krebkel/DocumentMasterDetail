@@ -78,6 +78,11 @@ public class InvoiceService : IInvoiceService
         _logger.LogInformation("Документ успешно обновлен: {@InvoiceNumber}", existingInvoice.Number);
     }
 
+    public async Task<Invoice> GetInvoiceAsync(int id)
+    {
+        return await _dbContext.Invoices.FindAsync(id);
+    }
+
     public async Task<Invoice[]> GetAllInvoicesAsync()
     {
         return await _dbContext.Invoices.ToArrayAsync();

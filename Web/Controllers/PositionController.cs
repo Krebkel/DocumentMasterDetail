@@ -68,7 +68,7 @@ public class PositionController : ControllerBase
         }
     }
     
-    [HttpDelete]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeletePosition(int id, CancellationToken ct)
     {

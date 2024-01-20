@@ -27,5 +27,5 @@ public class UpdateInvoiceApiRequest
     /// <summary>
     /// Позиции документа
     /// </summary>
-    public List<Position>? Positions { get; set; }
+    public Position[] Positions { get; set; }
 }

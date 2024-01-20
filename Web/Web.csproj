@@ -35,4 +35,10 @@
       <None Include="wwwroot\index.html" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\modules\invoices.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\positions.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\utils.js" />
+    </ItemGroup>
+
 </Project>

@@ -23,6 +23,9 @@ public interface IInvoiceService
     /// Удалить документ
     /// </summary>
     Task DeleteInvoiceAsync(string number, CancellationToken cancellationToken);
+
+    Task<Invoice> GetInvoiceAsync(int id);
+
 }
 
 public class UpdateInvoiceRequest
@@ -31,7 +34,6 @@ public class UpdateInvoiceRequest
     public string? Number { get; set; }
     public DateTimeOffset? Date { get; set; }
     public string? Note { get; set; }
-
 }
 
 public class CreateInvoiceRequest

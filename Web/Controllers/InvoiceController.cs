@@ -52,7 +52,23 @@ public class InvoiceController : ControllerBase
             return BadRequest($"Ошибка при обновлении документа {e.Message}");
         }
     }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetInvoice(int id)
+    {
+        try
+        {
+            var invoice = await _invoiceService.GetInvoiceAsync(id);
 
+            return Ok(invoice);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Ошибка при получении документа");
+            return BadRequest($"Ошибка при получении документа {e.Message}");
+        }
+    }
+    
     [HttpGet]
     public async Task<IActionResult> GetAllInvoices()
     {
@@ -69,7 +85,7 @@ public class InvoiceController : ControllerBase
         }
     }
     
-    [HttpDelete]
+    [HttpDelete("{number}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteInvoice(string number, CancellationToken ct)
     {

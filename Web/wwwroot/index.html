@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Viewer</title>
+    <title>Документы</title>
     <style>
+        /* Общие стили для таблиц и кнопок */
         table {
             border-collapse: collapse;
             width: 100%;
@@ -25,16 +26,76 @@
             cursor: pointer;
         }
 
-        .action-buttons {
-            display: flex;
+        .action-buttons button {
+            margin-right: 6px;
+            padding: 10px;
+            background-color: #4596d1;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 10px;
         }
 
-        .action-buttons button {
-            margin-right: 10px;
+        .action-buttons button:hover {
+            background-color: #025ea1;
+        }
+
+        /* Стили для формы создания */
+        #addInvoiceForm, #updateInvoiceFormDiv {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .invoice-form h2 {
+            margin-bottom: 10px;
+        }
+
+        .invoice-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .invoice-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+
+        .invoice-form button {
+            padding: 6px;
+            background-color: #4596d1;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .invoice-form button:hover {
+            background-color: #025ea1;
+        }
+
+        .invoice-form table {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Стили для кнопки "Создать документ" */
+        #showAddInvoiceFormButton {
+            margin-right: 6px;
+            padding: 6px;
+            background-color: #4596d1;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 10px;
         }
     </style>
 </head>
 <body>
+
+<button id="showAddInvoiceFormButton" onclick="showAddInvoiceForm()">Создать документ</button>
 
 <table id="invoicesTable">
     <thead>
@@ -62,7 +123,357 @@
     </tbody>
 </table>
 
+<div id="addInvoiceForm" class="invoice-form">
+    <h2>Добавить новый документ</h2>
+    <form id="invoiceForm">
+        <label for="number">Номер:</label>
+        <input type="text" id="number" required>
+
+        <label for="date">Дата:</label>
+        <input type="date" id="date" required>
+
+        <label for="note">Примечание:</label>
+        <input type="text" id="note" required>
+
+        <h3>Позиции:</h3>
+        <table id="invoiceFormPositionsTable">
+            <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Количество</th>
+                <th>Цена</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Динамические строки будут добавлены здесь -->
+            </tbody>
+        </table>
+
+        <button type="button" onclick="addPositionRow()">Добавить позицию</button>
+        <button type="button" onclick="addNewInvoice()">Добавить документ</button>
+    </form>
+</div>
+
+<div id="updateInvoiceFormDiv" class="invoice-form">
+    <h2>Обновить документ</h2>
+    <form id="updateInvoiceForm">
+        <!-- Поля для обновления документа -->
+        <label for="updateNumber">Номер:</label>
+        <input type="text" id="updateNumber" required>
+
+        <label for="updateDate">Дата:</label>
+        <input type="date" id="updateDate" required>
+
+        <label for="updateNote">Примечание:</label>
+        <input type="text" id="updateNote" required>
+
+        <table id="updateInvoiceFormPositionsTable">
+            <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Количество</th>
+                <th>Цена</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Динамические строки будут добавлены здесь -->
+            </tbody>
+        </table>
+
+        <button type="button" onclick="addPositionRowToUpdateForm()">Добавить позицию</button>
+        <button type="button" onclick="updateInvoice()" id="updateButton">Обновить документ</button>
+    </form>
+</div>
+
 <script>
+    function showUpdateInvoiceForm(id) {
+        
+        hideAddInvoiceForm();
+
+        // Получаем позиции для текущего документа
+        getPositionsByInvoiceId(id)
+            .then(positions => {
+                // Заполняем поля формы обновления данными текущего документа (по id)
+                const invoiceToUpdate = findInvoiceById(id, positions);
+                if (invoiceToUpdate && invoiceToUpdate.positions) {
+                    const positionsTableBody = document.getElementById('updateInvoiceFormPositionsTable').getElementsByTagName('tbody')[0];
+                    document.getElementById('updateNumber').value = invoiceToUpdate.number;
+                    document.getElementById('updateDate').valueAsDate = new Date(invoiceToUpdate.date);
+                    document.getElementById('updateNote').value = invoiceToUpdate.note;
+
+                    // Очищаем таблицу позиций перед добавлением новых
+                    positionsTableBody.innerHTML = '';
+
+                    // Добавляем позиции в таблицу
+                    invoiceToUpdate.positions.forEach(position => {
+                        const newRow = positionsTableBody.insertRow();
+                        newRow.innerHTML = `
+                            <td contenteditable="true">${position.name}</td>
+                            <td contenteditable="true">${position.quantity}</td>
+                            <td contenteditable="true">${position.value}</td>
+                            <td>
+                                <button type="button" onclick="updatePosition(${position.id})">Обновить</button>
+                                <button type="button" onclick="deletePosition(${position.id})">Удалить</button>
+                            </td>
+                        `;
+                    });
+
+                    const updateButton = document.getElementById('updateButton');
+                    updateButton.setAttribute('data-invoice-id', id);
+                }
+
+                document.getElementById('updateInvoiceFormDiv').style.display = 'block';
+            })
+            .catch(error => console.error(`Ошибка при получении позиций для документа ${id}:`, error));
+    }
+
+    async function getPositionsByInvoiceId(invoiceId) {
+        try {
+            const response = await fetch(`http://localhost/api/positions/${invoiceId}`);
+
+            return await response.json();
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    }
+
+    async function deletePosition(positionId) {
+        try {
+            const response = await fetch(`http://localhost/api/positions/${positionId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                console.error(`Ошибка при удалении позиции ${positionId}: ${response.statusText}`);
+                return;
+            }
+
+            // Обновите форму обновления документа после удаления позиции
+            showUpdateInvoiceForm(parseInt(document.getElementById('updateButton').getAttribute('data-invoice-id'), 10));
+        } catch (error) {
+            console.error(`Ошибка при удалении позиции ${positionId}:`, error.message);
+        }
+    }
+
+    function hideUpdateInvoiceForm() {
+        document.getElementById('updateInvoiceFormDiv').style.display = 'none';
+    }
+
+    function hideAddInvoiceForm() {
+        document.getElementById('addInvoiceForm').style.display = 'none';
+    }
+
+    function addPositionRowToUpdateForm() {
+        const positionsTableBody = document.getElementById('updateInvoiceFormPositionsTable').getElementsByTagName('tbody')[0];
+
+        // Проверяем, существует ли positionsTableBody
+        if (!positionsTableBody) {
+            console.error('Не удалось найти tbody для таблицы позиций.');
+            return;
+        }
+
+        const newRow = positionsTableBody.insertRow();
+
+        // Добавляем ячейки для каждого поля позиции
+        newRow.innerHTML = `
+        <td><input type="text" name="updatePositionName_${positionRowCounter}" required></td>
+        <td><input type="number" name="updatePositionQuantity_${positionRowCounter}" oninput="validateNumberInput(this)" required></td>
+        <td><input type="number" name="updatePositionPrice_${positionRowCounter}" oninput="validateNumberInput(this)" required></td>
+        <td><button type="button" onclick="removePositionRowToUpdateForm(${positionRowCounter})">Удалить</button></td>
+    `;
+
+        positionRowCounter++;
+    }
+    
+    function removePositionRowToUpdateForm(rowNumber) {
+        const positionsTableBody = document.getElementById('updateInvoiceFormPositionsTable').getElementsByTagName('tbody')[0];
+        positionsTableBody.deleteRow(rowNumber);
+    }
+
+    async function updateInvoice() {
+        const invoiceId = parseInt(document.getElementById('updateButton').getAttribute('data-invoice-id'), 10);
+        const updateNumber = document.getElementById('updateNumber').value;
+        const updateDate = new Date(document.getElementById('updateDate').value);
+        const updateNote = document.getElementById('updateNote').value;
+        document.getElementById('updateDate').valueAsDate = new Date(invoiceToUpdate.date);
+
+            const updateData = {
+            Id: invoiceId,
+            Number: updateNumber,
+            Date: convertMoscowTimeToUtc(updateDate),
+            Note: updateNote,
+            Positions: []
+        };
+
+        const positionsTableRows = document.getElementById('invoiceFormPositionsTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+        for (let i = 0; i < positionsTableRows.length; i++) {
+            const positionRow = positionsTableRows[i];
+            const positionName = positionRow.querySelector('input[name^="positionName"]').value;
+            const positionQuantity = positionRow.querySelector('input[name^="positionQuantity"]').value;
+            const positionPrice = positionRow.querySelector('input[name^="positionPrice"]').value;
+
+            // Создаем объект позиции и добавляем его в массив Positions
+            const positionData = {
+                Name: positionName,
+                Quantity: positionQuantity,
+                Price: positionPrice
+            };
+
+            updateData.Positions.push(positionData);
+        }
+        
+        try {
+            const response = await fetch(`http://localhost/api/invoices/${invoiceId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            });
+
+            if (!response.ok) {
+                console.error('Ошибка при обновлении документа:', response.statusText);
+                return;
+            }
+
+            hideUpdateInvoiceForm();
+            fetchInvoices();
+        } catch (error) {
+            console.error('Ошибка при обновлении документа:', error.message);
+        }
+    }
+
+    async function updatePosition(positionId) {
+        try {
+            const positionsTableBody = document.getElementById('updateInvoiceFormPositionsTable').getElementsByTagName('tbody')[0];
+            const positionRow = Array.from(positionsTableBody.getElementsByTagName('tr')).find(row => row.contains(event.target) || row === event.target.parentNode);
+            const positionName = positionRow.cells[0].textContent.trim();
+            const positionQuantity = positionRow.cells[1].textContent.trim();
+            const positionValue = positionRow.cells[2].textContent.trim();
+
+            // Проверка на пустые значения или некорректные данные
+            if (!positionName || !positionQuantity || !positionValue) {
+                console.error('Пожалуйста, заполните все поля для обновления позиции.');
+                return;
+            }
+
+            const positionData = {
+                Name: positionName,
+                Quantity: positionQuantity,
+                Value: positionValue
+            };
+
+            const response = await fetch(`http://localhost/api/positions/${positionId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(positionData)
+            });
+
+            if (!response.ok) {
+                console.error(`Ошибка при обновлении позиции ${positionId}: ${response.statusText}`);
+                return;
+            }
+
+            // Обновите форму обновления документа после обновления позиции
+            showUpdateInvoiceForm(parseInt(document.getElementById('updateButton').getAttribute('data-invoice-id'), 10));
+        } catch (error) {
+            console.error(`Ошибка при обновлении позиции ${positionId}:`, error.message);
+        }
+        fetchInvoices();
+    }
+    
+    function convertMoscowTimeToUtc(localDate) {
+        const moscowTimezoneOffset = new Date().getTimezoneOffset(); // Получаем текущее смещение времени в минутах
+        const utcDate = new Date(localDate.getTime()     - moscowTimezoneOffset * 60000);
+        return utcDate.toISOString();
+    }
+    
+    function createStyledButton(text, backgroundColor, hoverColor) {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.style.backgroundColor = backgroundColor;
+        button.style.color = 'white';
+        button.style.border = 'none';
+        button.style.cursor = 'pointer';
+
+        button.addEventListener('mouseenter', () => {
+            button.style.backgroundColor = hoverColor;
+        });
+
+        button.addEventListener('mouseleave', () => {
+            button.style.backgroundColor = backgroundColor;
+        });
+
+        return button;
+    }
+
+    // Подсчет суммы
+    async function calculateTotalAmount(invoiceId, tableId) {
+        const response = await fetch(`http://localhost/api/positions/${invoiceId}`);
+        const positions = await response.json();
+
+        let totalAmount = 0;
+
+        positions.forEach(position => {
+            totalAmount += position.value * position.quantity;
+        });
+
+        const rows = document.getElementById(tableId).getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const dataInvoiceId = row.getAttribute('data-invoice-id');
+
+            if (dataInvoiceId && parseInt(dataInvoiceId) === invoiceId) {
+                const cells = row.getElementsByTagName('td');
+                cells[2].textContent = totalAmount.toFixed(2);
+                break;
+            }
+        }
+    }
+
+    function findInvoiceById(id, positions) {
+        const invoicesTableBody = document.getElementById('invoicesTable').getElementsByTagName('tbody')[0];
+        const rows = invoicesTableBody.getElementsByTagName('tr');
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const dataInvoiceId = row.getAttribute('data-invoice-id');
+
+            if (dataInvoiceId && parseInt(dataInvoiceId) === id) {
+                const cells = row.getElementsByTagName('td');
+                const number = cells[0].textContent;
+                const date = cells[1].textContent;
+                const totalAmount = cells[2].textContent;
+                const note = cells[3].textContent;
+
+                return {
+                    id: id,
+                    number: number,
+                    date: date,
+                    totalAmount: totalAmount,
+                    note: note,
+                    positions: positions  // Добавляем позиции к объекту инвойса
+                };
+            }
+        }
+
+        return null;
+    }
+
+
+    // Видимость формы добавления документа
+    function showAddInvoiceForm() {
+        hideUpdateInvoiceForm();  // Закрыть форму обновления, если она открыта
+        const addInvoiceForm = document.getElementById('addInvoiceForm');
+        addInvoiceForm.style.display = addInvoiceForm.style.display === 'none' ? 'block' : 'none';
+        document.getElementById('invoiceForm').reset();
+    }
+    
     // Фетч документов
     function fetchInvoices() {
         fetch('http://localhost/api/invoices')
@@ -72,43 +483,41 @@
                 invoicesTableBody.innerHTML = '';
 
                 data.forEach(invoice => {
-                    const row = invoicesTableBody.insertRow();
-                    row.innerHTML = `<td>${invoice.number}</td><td>${invoice.date}</td><td>${invoice.totalAmount}</td><td>${invoice.note}</td>`;
+                    const moscowDate = new Date(invoice.date).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
 
-                    // Кнопки "Изменить" и "Удалить"
+                    const row = invoicesTableBody.insertRow();
+                    row.innerHTML = `<td>${invoice.number}</td><td>${moscowDate}</td><td>${invoice.totalAmount}</td><td>${invoice.note}</td>`;
+
                     const actionsCell = row.insertCell();
-                    const updateButton = document.createElement('button');
-                    updateButton.textContent = 'Изменить';
-                    updateButton.addEventListener('click', () => updateInvoice(invoice.id));
+                    
+                    row.setAttribute('data-invoice-id', invoice.id);
+
+                    const updateButton = createStyledButton('Изменить', '#4596d1', '#025ea1');
+                    updateButton.addEventListener('click', () => showUpdateInvoiceForm(invoice.id));
                     actionsCell.appendChild(updateButton);
 
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Удалить';
-                    deleteButton.addEventListener('click', () => deleteInvoice(invoice.id));
+                    const deleteButton = createStyledButton('Удалить', '#4596d1', '#025ea1');
+                    deleteButton.addEventListener('click', () => {
+                        const invoiceNumber = invoice.number;
+                        deleteInvoiceByNumber(invoiceNumber);
+                    });
                     actionsCell.appendChild(deleteButton);
 
-                    row.addEventListener('click', () => fetchPositions(invoice.id));
+                    row.addEventListener('click', () => showPositions(invoice.id));
+                    
+                    calculateTotalAmount(invoice.id,"invoicesTable");
                 });
             })
-            .catch(error => console.error('Error fetching invoices:', error));
+            .catch(error => console.error('Ошибка загрузки документов:', error));
     }
-
-    // Фетч позиций конкретного документа
-    function fetchPositions(invoiceId) {
-        fetch(`http://localhost/api/invoices/${invoiceId}/positions`)
-            .then(response => response.json())
-            .then(data => {
-                const positionsTableBody = document.getElementById('positionsTable').getElementsByTagName('tbody')[0];
-                positionsTableBody.innerHTML = '';
-
-                data.forEach(position => {
-                    const row = positionsTableBody.insertRow();
-                    row.innerHTML = `<td>${position.productName}</td><td>${position.quantity}</td><td>${position.price}</td>`;
-                });
-            })
-            .catch(error => console.error(`Error fetching positions for invoice ${invoiceId}:`, error));
+    
+    //Убрать строку позиций из формы создания документа
+    function removePositionRow(rowNumber) {
+        const positionsTableBody = document.getElementById('positionsTable').getElementsByTagName('tbody')[0];
+        positionsTableBody.deleteRow(rowNumber);
     }
-
+    
+    // Добавление нового документа на бек
     async function addInvoice(newInvoiceData) {
         const response = await fetch('http://localhost/api/invoices', {
             method: 'POST',
@@ -119,15 +528,112 @@
         });
 
         if (!response.ok) {
-            console.error('Error adding invoice:', response.statusText);
+            console.error('Ошибка добавления документа:', response.statusText);
             return null;
         }
 
         return await response.json();
     }
 
-    async function deleteInvoice(id) {
-        const response = await fetch(`http://localhost/api/invoices/${id}`, {
+    // Добавление новой позиции на бек
+    async function addPosition(newPositionData) {
+        const response = await fetch('http://localhost/api/positions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Name: newPositionData.name,
+                Quantity: newPositionData.quantity,
+                Value: newPositionData.value,
+                InvoiceId: newPositionData.invoiceId
+            })
+        });
+
+        if (!response.ok) {
+            console.error('Ошибка добавления позиции:', response.statusText);
+            return null;
+        }
+
+        return await response.json();
+    }
+
+    let positionRowCounter = 0;
+
+    function addPositionRow() {
+        const positionsTableBody = document.getElementById('invoiceFormPositionsTable').getElementsByTagName('tbody')[0];
+
+        // Проверяем, существует ли positionsTableBody
+        if (!positionsTableBody) {
+            console.error('Не удалось найти tbody для таблицы позиций.');
+            return;
+        }
+        
+        const newRow = positionsTableBody.insertRow();
+
+        // Добавляем ячейки для каждого поля позиции
+        newRow.innerHTML = `
+            <td><input type="text" name="positionName_${positionRowCounter}" required></td>
+            <td><input type="number" name="positionQuantity_${positionRowCounter}" oninput="validateNumberInput(this)" required></td>
+            <td><input type="number" name="positionPrice_${positionRowCounter}" oninput="validateNumberInput(this)" required></td>
+            <td><button type="button" onclick="removePositionRow(${positionRowCounter})">Удалить</button></td>
+        `;
+
+        positionRowCounter++;
+    }
+
+    // Добавление нового документа на фронте
+    async function addNewInvoice() {
+        const number = document.getElementById('number').value;
+        const localDate = new Date(document.getElementById('date').value);
+        const note = document.getElementById('note').value;
+
+        const newInvoiceData = {
+            number: number,
+            date: convertMoscowTimeToUtc(localDate),
+            note: note
+        };
+        
+        const addedInvoice = await addInvoice(newInvoiceData);
+
+        if (addedInvoice) {
+            const positionsContainer = document.getElementById('invoiceFormPositionsTable');
+            const positionRows = positionsContainer.querySelectorAll('tbody tr');
+            
+            if (positionRows.length > 0) {
+                // Обрабатываем каждую строку позиции
+                for (let i = 0; i < positionRows.length; i++) {
+                    const positionRow = positionRows[i];
+                    const positionName = positionRow.querySelector('input[name^="positionName"]').value;
+                    const positionQuantity = positionRow.querySelector('input[name^="positionQuantity"]').value;
+                    const positionPrice = positionRow.querySelector('input[name^="positionPrice"]').value;
+
+                    // Создаем данные позиции
+                    const positionData = {
+                        name: positionName,
+                        quantity: positionQuantity,
+                        value: positionPrice,
+                        invoiceId: addedInvoice.result.id
+                    };
+
+                    // Добавляем данные позиции в массив
+                    const addedPosition = await addPosition(positionData);
+                    console.log(addedPosition);
+                }
+            }
+            // Очищаем форму и контейнер строк после успешного добавления
+            document.getElementById('invoiceForm').reset();
+            document.getElementById('invoiceFormPositionsTable').getElementsByTagName('tbody')[0].innerHTML = '';
+            showAddInvoiceForm();
+
+            // Обновляем таблицу документов
+            fetchInvoices();
+        }
+    }
+
+    // Удаление документа
+    async function deleteInvoiceByNumber(number) {
+        const response = await fetch(`http://localhost/api/invoices/${encodeURIComponent(number)}`, {
             method: 'DELETE'
         });
 
@@ -140,11 +646,40 @@
         return true;
     }
 
-    function updateInvoice(id) {
-        // Обновление документа
-        console.log(`Update Invoice with ID: ${id}`);
+    // Фетч позиций конкретного документа
+    async function showPositions(invoiceId) {
+        fetch(`http://localhost/api/positions/${invoiceId}`)
+            .then(response => response.json())
+            .then(data => {
+                const positionsTableBody = document.getElementById('positionsTable').getElementsByTagName('tbody')[0];
+                positionsTableBody.innerHTML = '';
+
+                data.forEach(position => {
+                    const row = positionsTableBody.insertRow();
+                    row.innerHTML = `<td>${position.name}</td><td>${position.quantity}</td><td>${position.value}</td>`;
+                });
+            })
+            .catch(error => console.error(`Ошибка загрузки позиций документа ${invoiceId}:`, error));
     }
 
+    function validateNumberInput(input) {
+        input.addEventListener('keydown', function (event) {
+            // Получаем код клавиши
+            const keyCode = event.keyCode;
+
+            // Разрешаем ввод цифр (48-57), точки (190) и клавиш Backspace (8) и Delete (46)
+            if ((keyCode < 48 || keyCode > 57) && keyCode !== 190 && keyCode !== 8 && keyCode !== 46) {
+                // Предотвращаем ввод символов, отличных от цифр и точки
+                event.preventDefault();
+            }
+
+            // Если уже есть точка, предотвращаем ввод дополнительных точек
+            if (keyCode === 190 && input.value.includes('.')) {
+                event.preventDefault();
+            }
+        });
+    }
+    
     // Первичный фетч документов
     fetchInvoices();
 </script>
