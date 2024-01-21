@@ -5,14 +5,14 @@ namespace Web.Extensions;
 
 public static class PositionExtension
 {
-    public static CreatePositionRequest ToAddPositionRequest(this AddPositionApiRequest apiRequest)
+    public static CreatePositionRequest ToAddPositionRequest(this AddPositionApiRequest apiRequest, int invoiceId)
     {
         return new CreatePositionRequest
         {
             Name = apiRequest.Name,
-            Quantity = apiRequest.Quantity,
-            Value = apiRequest.Value,
-            InvoiceId = apiRequest.InvoiceId
+            Number = apiRequest.Number,
+            Sum = apiRequest.Sum,
+            InvoiceId = invoiceId
         };
     }
 
@@ -22,8 +22,8 @@ public static class PositionExtension
         {
             Id = id,
             Name = apiRequest.Name,
-            Quantity = apiRequest.Quantity,
-            Value = apiRequest.Value
+            Number = apiRequest.Number,
+            Value = apiRequest.Sum
         };
     }
 }

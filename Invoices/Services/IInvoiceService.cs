@@ -12,7 +12,7 @@ public interface IInvoiceService
     /// <summary>
     /// Обновить документ
     /// </summary>
-    Task UpdateInvoiceAsync(UpdateInvoiceRequest invoice, CancellationToken cancellationToken);
+    Task<InvoiceUpdateResult> UpdateInvoiceAsync(UpdateInvoiceRequest invoice, CancellationToken cancellationToken);
     
     /// <summary>
     /// Получить все документы
@@ -22,7 +22,7 @@ public interface IInvoiceService
     /// <summary>
     /// Удалить документ
     /// </summary>
-    Task DeleteInvoiceAsync(string number, CancellationToken cancellationToken);
+    Task DeleteInvoiceAsync(int id, CancellationToken cancellationToken);
 
     Task<Invoice> GetInvoiceAsync(int id);
 
@@ -30,7 +30,7 @@ public interface IInvoiceService
 
 public class UpdateInvoiceRequest
 {
-    public int Id { get; }
+    public int Id { get; set; }
     public string? Number { get; set; }
     public DateTimeOffset? Date { get; set; }
     public string? Note { get; set; }
@@ -38,7 +38,6 @@ public class UpdateInvoiceRequest
 
 public class CreateInvoiceRequest
 {
-    public int Id { get; set; }
     public string Number { get; set; }
     public DateTimeOffset Date { get; set; }
     public string Note { get; set; }

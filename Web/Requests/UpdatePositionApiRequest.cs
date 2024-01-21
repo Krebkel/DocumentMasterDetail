@@ -12,10 +12,10 @@ public class UpdatePositionApiRequest
     /// <summary>
     /// Количество
     /// </summary>
-    public decimal? Quantity { get; set; }
-
+    public string? Number { get; set; }
+    
     /// <summary>
     /// Сумма
     /// </summary>
-    public decimal? Value { get; set; }
+    public decimal? Sum { get; set; }
 }

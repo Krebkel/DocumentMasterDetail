@@ -1,6 +1,7 @@
 using Data;
 using ErrorLogs;
 using Invoices;
+using Microsoft.EntityFrameworkCore;
 using Positions;
 using Microsoft.Net.Http.Headers;
 
@@ -53,4 +54,14 @@ app.UseDefaultFiles()
         }
     });
 
+InitializeDatabase(app);
 app.Run();
+
+void InitializeDatabase(IApplicationBuilder application)
+{
+    using var scope = application.ApplicationServices
+        .GetRequiredService<IServiceScopeFactory>()
+        .CreateScope();
+    
+    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+}

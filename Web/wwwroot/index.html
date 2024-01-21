@@ -1,105 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Документы</title>
-    <linkrel="stylesheet" type="text/css" href="/assets/styles/styles.css"/>
+    <title>Document</title>
+    <link rel="stylesheet" href="./libs/bootstrap.css">
+    <link rel="stylesheet" href="./libs/awesome_6.0.0_css_all.css">
 </head>
+
 <body>
-
-<button id="showAddInvoiceFormButton" onclick="showAddInvoiceForm()">Создать документ</button>
-
-<table id="invoicesTable">
-    <thead>
-    <tr>
-        <th>Номер</th>
-        <th>Дата</th>
-        <th>Сумма</th>
-        <th>Примечание</th>
-        <th>Действия</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-
-<table id="positionsTable">
-    <thead>
-    <tr>
-        <th>Наименование</th>
-        <th>Количество</th>
-        <th>Цена</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-
-<div id="addInvoiceForm" class="invoice-form">
-    <h2>Добавить новый документ</h2>
-    <form id="invoiceForm">
-        <label for="number">Номер:</label>
-        <input type="text" id="number" required>
-
-        <label for="date">Дата:</label>
-        <input type="date" id="date" required>
-
-        <label for="note">Примечание:</label>
-        <input type="text" id="note" required>
-
-        <h3>Позиции:</h3>
-        <table id="invoiceFormPositionsTable">
-            <thead>
-            <tr>
-                <th>Наименование</th>
-                <th>Количество</th>
-                <th>Цена</th>
-                <th>Действия</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Динамические строки будут добавлены здесь -->
-            </tbody>
-        </table>
-
-        <button type="button" onclick="addPositionRow()">Добавить позицию</button>
-        <button type="button" onclick="addNewInvoice()">Добавить документ</button>
-    </form>
+<!--таблица документов-->
+<div class="container my-2 invoice-table">
+    <button type="button" class="btn btn-warning my-2 table-add">Добавить документ</button>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Номер</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Примечание</th>
+            <th scope="col">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </div>
 
-<div id="updateInvoiceFormDiv" class="invoice-form">
-    <h2>Обновить документ</h2>
-    <form id="updateInvoiceForm">
-        <!-- Поля для обновления документа -->
-        <label for="updateNumber">Номер:</label>
-        <input type="text" id="updateNumber" required>
-
-        <label for="updateDate">Дата:</label>
-        <input type="date" id="updateDate" required>
-
-        <label for="updateNote">Примечание:</label>
-        <input type="text" id="updateNote" required>
-
-        <table id="updateInvoiceFormPositionsTable">
-            <thead>
-            <tr>
-                <th>Наименование</th>
-                <th>Количество</th>
-                <th>Цена</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Динамические строки будут добавлены здесь -->
-            </tbody>
-        </table>
-
-        <button type="button" onclick="addPositionRowToUpdateForm()">Добавить позицию</button>
-        <button type="button" onclick="updateInvoice()" id="updateButton">Обновить документ</button>
-    </form>
+<!--таблица позиций документов-->
+<div class="container my-2 position-table">
+    <button type="button" class="btn btn-primary my-2 table-add">Добавить позицию</button>
+    <table class="table table-striped" id="table">
+        <thead>
+        <tr>
+            <th scope="col">Номер</th>
+            <th scope="col">Наименование</th>
+            <th scope="col">Сумма</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </div>
 
-<script type="module" src="main.js"></script>
+<!-- jquery+bootstrap  -->
+<script src="./libs/jquery.js"></script>
+<script src="./libs/bootstrap.js"></script>
 
+<script src="script.js"></script>
 </body>
+
 </html>

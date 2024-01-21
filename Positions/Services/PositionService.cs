@@ -30,8 +30,8 @@ public class PositionService : IPositionService
         var createdPosition = new Position
         {
             Name = request.Name,
-            Quantity = request.Quantity,
-            Value = request.Value,
+            Number = request.Number,
+            Value = request.Sum,
             Invoice = invoice
         };
 
@@ -42,22 +42,22 @@ public class PositionService : IPositionService
         return PositionCreationResult.Success(createdPosition);
     }
 
-    public async Task UpdatePositionAsync(UpdatePositionRequest request, CancellationToken ct)
+    public async Task<Position> UpdatePositionAsync(UpdatePositionRequest request, CancellationToken ct)
     {
         var existingPosition = await _dbContext.Positions.FindAsync(request.Id);
 
         if (existingPosition == null)
         {
             _logger.LogWarning("Позиция с Id {PositionId} не найдена.", request.Id);
-            return;
+            throw new ApplicationException($"Не найдена позиция с id: {request.Id}");
         }
 
         // Обновление свойств позиции
-        if (request.Name != null)
+        if (!string.IsNullOrEmpty(request.Name))
             existingPosition.Name = request.Name;
         
-        if (request.Quantity.HasValue)
-            existingPosition.Quantity = request.Quantity.Value;
+        if (!string.IsNullOrEmpty(request.Number))
+            existingPosition.Number = request.Number;
         
         if (request.Value.HasValue)
             existingPosition.Value = request.Value.Value;
@@ -65,6 +65,8 @@ public class PositionService : IPositionService
         await _dbContext.SaveChangesAsync(ct);
 
         _logger.LogInformation("Позиция успешно обновлена: {@Position}", existingPosition);
+
+        return existingPosition;
     }
     
     public async Task<Position> GetPositionAsync(int id)

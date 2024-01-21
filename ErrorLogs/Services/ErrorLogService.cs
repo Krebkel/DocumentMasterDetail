@@ -19,7 +19,7 @@ public class ErrorLogService : IErrorLogService
     {
         var createdErrorLog = new ErrorLog
         {
-            Date = request.Date,
+            Date = DateTimeOffset.UtcNow,
             Note = request.Note
         };
 

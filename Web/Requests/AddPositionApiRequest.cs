@@ -12,15 +12,10 @@ public class AddPositionApiRequest
     /// <summary>
     /// Количество
     /// </summary>
-    public required decimal Quantity { get; set; }
+    public required string Number { get; set; }
 
     /// <summary>
     /// Сумма
     /// </summary>
-    public required decimal Value { get; set; }
-
-    /// <summary>
-    /// ID документа
-    /// </summary>
-    public required int InvoiceId { get; set; }
+    public required decimal Sum { get; set; }
 }

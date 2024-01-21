@@ -1,18 +1,11 @@
-using Contracts;
-
 namespace Web.Requests;
 
 public class UpdateInvoiceApiRequest
 {
     /// <summary>
-    /// Идентификатор документа
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
     /// Номер документа
     /// </summary>
-    public string Number { get; set; }
+    public string? Number { get; set; }
 
     /// <summary>
     /// Дата проведения
@@ -23,9 +16,4 @@ public class UpdateInvoiceApiRequest
     /// Примечание
     /// </summary>
     public string? Note { get; set; }
-
-    /// <summary>
-    /// Позиции документа
-    /// </summary>
-    public Position[] Positions { get; set; }
 }

@@ -6,14 +6,14 @@ namespace Contracts;
 public class Position : DatabaseEntity
 {
     /// <summary>
+    /// Номер
+    /// </summary>
+    public required string Number { get; set; }
+
+    /// <summary>
     /// Наименование
     /// </summary>
     public required string Name { get; set; }
-
-    /// <summary>
-    /// Количество
-    /// </summary>
-    public required decimal Quantity { get; set; }
 
     /// <summary>
     /// Сумма

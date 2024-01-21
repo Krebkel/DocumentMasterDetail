@@ -26,7 +26,7 @@ public class InvoiceService : IInvoiceService
         var createdInvoice = new Invoice
         {
             Number = request.Number,
-            Date = request.Date,
+            Date = request.Date.ToUniversalTime(),
             Note = request.Note
         };
 
@@ -40,47 +40,58 @@ public class InvoiceService : IInvoiceService
             when (e.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
         {
             _dbContext.Invoices.Remove(createdInvoice);
-            
-            var createdErrorLog = new ErrorLog
+            var reason = $"Не удалось добавить новый документ. Документ №{createdInvoice.Number} уже существует!";
+            await _errorLogService.CreateErrorLogAsync(new CreateErrorLogRequest
             {
-                Date = DateTimeOffset.UtcNow,
-                Note = $"Ошибка добавления нового документа. Документ №{createdInvoice.Number} от уже существует!"
-            };
-
-            await _dbContext.ErrorLogs.AddAsync(createdErrorLog, cancellationToken);
-            
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
-            return InvoiceCreationResult.Error("Ошибка добавления");
+                Note = reason
+            });
+            return InvoiceCreationResult.Error(reason);
         }
 
         return InvoiceCreationResult.Success(createdInvoice);
     }
 
-    public async Task UpdateInvoiceAsync(UpdateInvoiceRequest request, CancellationToken cancellationToken)
+    public async Task<InvoiceUpdateResult> UpdateInvoiceAsync(UpdateInvoiceRequest request, CancellationToken cancellationToken)
     {
-        var existingInvoice = await _dbContext.Invoices.FindAsync(request.Number);
+        var existingInvoice = await _dbContext.Invoices.FirstOrDefaultAsync(i => i.Id == request.Id);
 
         if (existingInvoice == null)
         {
-            _logger.LogWarning("Документ с номером {InvoiceNumber} не найден.", request.Number);
-            return;
+            _logger.LogWarning("Документ с Id: {Id} не найден.", request.Id);
+            return InvoiceUpdateResult.Error($"Не найден документ с Id: {request.Id}");
         }
 
-        if (request.Number != null)
+        if (!string.IsNullOrEmpty(request.Number))
             existingInvoice.Number = request.Number;
 
         if (request.Date.HasValue)
-            existingInvoice.Date = request.Date.Value;
+            existingInvoice.Date = request.Date.Value.ToUniversalTime();
 
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        if (!string.IsNullOrEmpty(request.Note))
+            existingInvoice.Note = request.Note;
 
+        try
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException e)
+            when (e.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+        {
+            await _dbContext.Invoices.Entry(existingInvoice).ReloadAsync(cancellationToken);
+            var reason = $"Не удалось обновить документ с Id:{existingInvoice.Id}. " +
+                         $"Произведена попытка поменять номер документа на существующий в базе: {request.Number}";
+            await _errorLogService.CreateErrorLogAsync(new CreateErrorLogRequest { Note = reason }, cancellationToken);
+            return InvoiceUpdateResult.Error(reason);
+        }
+        
         _logger.LogInformation("Документ успешно обновлен: {@InvoiceNumber}", existingInvoice.Number);
+
+        return InvoiceUpdateResult.Success(existingInvoice);
     }
 
     public async Task<Invoice> GetInvoiceAsync(int id)
     {
-        return await _dbContext.Invoices.FindAsync(id);
+        return await _dbContext.Invoices.FirstAsync(i => i.Id == id);
     }
 
     public async Task<Invoice[]> GetAllInvoicesAsync()
@@ -88,22 +99,13 @@ public class InvoiceService : IInvoiceService
         return await _dbContext.Invoices.ToArrayAsync();
     }
 
-    public async Task<Position[]> GetAllPositionsForInvoiceAsync(string invoiceNumber)
+    public async Task DeleteInvoiceAsync(int id, CancellationToken cancellationToken)
     {
-        var positions = await _dbContext.Positions
-            .Where(p => p.Invoice.Number.Equals(invoiceNumber))
-            .ToArrayAsync();
-        return positions;
-    }
-
-    public async Task DeleteInvoiceAsync(string number, CancellationToken cancellationToken)
-    {
-        var existingInvoice = await _dbContext.Invoices
-            .FirstOrDefaultAsync(i => i.Number == number);
+        var existingInvoice = await _dbContext.Invoices.FirstOrDefaultAsync(i => i.Id == id);
 
         if (existingInvoice == null)
         {
-            _logger.LogWarning("Документ с номером {InvoiceNumber} не найден.", number);
+            _logger.LogWarning("Документ с номером {InvoiceNumber} не найден.", id);
             return;
         }
 

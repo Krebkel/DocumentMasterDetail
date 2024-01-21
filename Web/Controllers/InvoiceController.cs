@@ -3,6 +3,8 @@ using Web.Extensions;
 using Web.Requests;
 using Invoices.Services;
 using Microsoft.AspNetCore.Mvc;
+using Positions.Services;
+using Web.Responses;
 
 namespace Web.Controllers;
 
@@ -12,11 +14,15 @@ public class InvoiceController : ControllerBase
 {
     private readonly ILogger<InvoiceController> _logger;
     private readonly IInvoiceService _invoiceService;
+    private readonly IPositionService _positionService;
 
-    public InvoiceController(ILogger<InvoiceController> logger, IInvoiceService invoiceService)
+    public InvoiceController(ILogger<InvoiceController> logger, 
+        IInvoiceService invoiceService, 
+        IPositionService positionService)
     {
         _logger = logger;
         _invoiceService = invoiceService;
+        _positionService = positionService;
     }
 
     [HttpPost]
@@ -26,14 +32,29 @@ public class InvoiceController : ControllerBase
         try
         {
             var addInvoiceRequest = apiRequest.ToAddInvoiceRequest();
-            var createdInvoice = await _invoiceService.CreateInvoiceAsync(addInvoiceRequest, ct);
-            return Ok(createdInvoice);
+            var result = await _invoiceService.CreateInvoiceAsync(addInvoiceRequest, ct);
+            
+            if (result.IsSuccess)
+            {
+                var invoicePositions = await _positionService.GetPositionsByInvoiceIdAsync(result.Result.Id);
 
+                var apiResult = new ApiInvoice
+                {
+                    Id = result.Result.Id,
+                    Number = result.Result.Number,
+                    Date = result.Result.Date,
+                    Note = result.Result.Note,
+                    Sum = invoicePositions.Select(p => p.Value).Sum()
+                };
+                return Ok(apiResult);
+            }
+            
+            return BadRequest(result);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Ошибка при добавлении документа");
-            return BadRequest($"Ошибка при добавлении документа {e.Message}");
+            return Problem($"Ошибка при добавлении документа {e.Message}");
         }
     }
 
@@ -43,8 +64,24 @@ public class InvoiceController : ControllerBase
         try
         {
             var updateInvoiceRequest = request.ToUpdateInvoiceRequest(id);
-            await _invoiceService.UpdateInvoiceAsync(updateInvoiceRequest, ct);
-            return Ok();
+            var result = await _invoiceService.UpdateInvoiceAsync(updateInvoiceRequest, ct);
+            
+            if (result.IsSuccess)
+            {
+                var invoicePositions = await _positionService.GetPositionsByInvoiceIdAsync(id);
+
+                var apiResult = new ApiInvoice
+                {
+                    Id = result.Result.Id,
+                    Number = result.Result.Number,
+                    Date = result.Result.Date,
+                    Note = result.Result.Note,
+                    Sum = invoicePositions.Select(p => p.Value).Sum()
+                };
+                return Ok(apiResult);
+            }
+
+            return BadRequest(result);
         }
         catch (Exception e)
         {
@@ -59,8 +96,17 @@ public class InvoiceController : ControllerBase
         try
         {
             var invoice = await _invoiceService.GetInvoiceAsync(id);
+            var positions = await _positionService.GetPositionsByInvoiceIdAsync(invoice.Id);
+            var result = new ApiInvoice
+            {
+                Id = invoice.Id,
+                Number = invoice.Number,
+                Date = invoice.Date,
+                Note = invoice.Note,
+                Sum = positions.Select(p => p.Value).Sum()
+            };
 
-            return Ok(invoice);
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -74,9 +120,23 @@ public class InvoiceController : ControllerBase
     {
         try
         {
-            var invoice = await _invoiceService.GetAllInvoicesAsync();
+            var result = new List<ApiInvoice>();
+            var invoices = await _invoiceService.GetAllInvoicesAsync();
 
-            return Ok(invoice);
+            foreach (var invoice in invoices)
+            {
+                var positions = await _positionService.GetPositionsByInvoiceIdAsync(invoice.Id);
+                result.Add(new ApiInvoice
+                {
+                    Id = invoice.Id,
+                    Number = invoice.Number,
+                    Date = invoice.Date,
+                    Note = invoice.Note,
+                    Sum = positions.Select(p => p.Value).Sum()
+                });
+            }
+
+            return Ok(result.ToArray());
         }
         catch (Exception e)
         {
@@ -85,13 +145,13 @@ public class InvoiceController : ControllerBase
         }
     }
     
-    [HttpDelete("{number}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> DeleteInvoice(string number, CancellationToken ct)
+    public async Task<IActionResult> DeleteInvoice(int id, CancellationToken ct)
     {
         try
         {
-            await _invoiceService.DeleteInvoiceAsync(number, ct);
+            await _invoiceService.DeleteInvoiceAsync(id, ct);
             return Ok();
         }
         catch (Exception e)

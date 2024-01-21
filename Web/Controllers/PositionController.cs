@@ -19,15 +19,15 @@ public class PositionController : ControllerBase
         _positionService = positionService;
     }
 
-    [HttpPost]
+    [HttpPost("invoice/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Position))]
-    public async Task<IActionResult> AddPosition([FromBody] AddPositionApiRequest apiRequest, CancellationToken ct)
+    public async Task<IActionResult> AddPosition(int id, [FromBody] AddPositionApiRequest apiRequest, CancellationToken ct)
     {
         try
         {
-            var addPositionRequest = apiRequest.ToAddPositionRequest();
+            var addPositionRequest = apiRequest.ToAddPositionRequest(id);
             var createdPosition = await _positionService.CreatePositionAsync(addPositionRequest, ct);
-            return Ok(createdPosition);
+            return Ok(createdPosition.Result);
         }
         catch (Exception e)
         {
@@ -42,8 +42,8 @@ public class PositionController : ControllerBase
         try
         {
             var updatePositionRequest = request.ToUpdatePositionRequest(id);
-            await _positionService.UpdatePositionAsync(updatePositionRequest, ct);
-            return Ok();
+            var result = await _positionService.UpdatePositionAsync(updatePositionRequest, ct);
+            return Ok(result);
         }
         catch (Exception e)
         {

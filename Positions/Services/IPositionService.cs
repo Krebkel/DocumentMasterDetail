@@ -12,7 +12,7 @@ public interface IPositionService
     /// <summary>
     /// Обновить позицию
     /// </summary>
-    Task UpdatePositionAsync(UpdatePositionRequest position, CancellationToken ct);
+    Task<Position> UpdatePositionAsync(UpdatePositionRequest position, CancellationToken ct);
 
     /// <summary>
     /// Удалить позицию
@@ -29,14 +29,14 @@ public class UpdatePositionRequest
 {
     public int Id { get; set; }
     public string? Name { get; set; }
-    public decimal? Quantity { get; set; }
+    public string? Number { get; set; }
     public decimal? Value { get; set; }
 }
 
 public class CreatePositionRequest
 {
     public required string Name { get; set; }
-    public required decimal Quantity { get; set; }
-    public required decimal Value { get; set; }
+    public required string Number { get; set; }
+    public required decimal Sum { get; set; }
     public required int InvoiceId { get; set; }
 }

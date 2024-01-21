@@ -19,6 +19,7 @@ public static class InvoiceExtension
     {
         return new UpdateInvoiceRequest
         {
+            Id = id,
             Number = apiRequest.Number,
             Date = apiRequest.Date,
             Note = apiRequest.Note
