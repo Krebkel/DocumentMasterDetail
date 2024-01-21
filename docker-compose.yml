@@ -17,14 +17,14 @@ services:
       timeout: 3s
       retries: 5
 
-   documents:
-     image: document:latest
-     ports:
-       - "80:80"
-     environment:
-       - Postgres:ConnectionString=Host=postgres;Port=5432;Database=postgres;Username=LocalUser;Password=12345;Pooling=true;Maximum Pool Size=10
-     depends_on:
-       - postgres
+  documents:
+    image: document:latest
+    ports:
+      - "80:80"
+    environment:
+      - Postgres:ConnectionString=Host=postgres;Port=5432;Database=postgres;Username=LocalUser;Password=12345;Pooling=true;Maximum Pool Size=10
+    depends_on:
+      - postgres
 
 volumes:
   pgdata:
