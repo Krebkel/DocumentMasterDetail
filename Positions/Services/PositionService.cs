@@ -1,5 +1,6 @@
 using Contracts;
 using Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Positions.Services;
@@ -15,41 +16,85 @@ public class PositionService : IPositionService
         _logger = logger;
     }
 
-    public async Task<Position> CreatePositionAsync(CreatePositionRequest request, CancellationToken cancellationToken)
+    public async Task<PositionCreationResult> CreatePositionAsync(CreatePositionRequest request, 
+        CancellationToken cancellationToken)
     {
+        var invoice = await _dbContext.Invoices.FirstOrDefaultAsync(i => i.Id == request.InvoiceId, 
+            cancellationToken: cancellationToken);
+        
+        if (invoice == null)
+        {
+            return PositionCreationResult.Error("Ошибка добавления позиции. Документ не найден!");
+        }
+        
         var createdPosition = new Position
         {
             Name = request.Name,
-            Quantity = request.Quantity,
-            Value = request.Value,
-            Invoice = request.Invoice
+            Number = request.Number,
+            Value = request.Sum,
+            Invoice = invoice
         };
 
-        _dbContext.Positions.Add(createdPosition);
+        await _dbContext.Positions.AddAsync(createdPosition, cancellationToken);
+
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Позиция успешно добавлена: {@Position}", createdPosition);
-        return createdPosition;
+        return PositionCreationResult.Success(createdPosition);
     }
 
-    public async Task UpdatePositionAsync(UpdatePositionRequest request, CancellationToken ct)
+    public async Task<Position> UpdatePositionAsync(UpdatePositionRequest request, CancellationToken ct)
     {
         var existingPosition = await _dbContext.Positions.FindAsync(request.Id);
 
         if (existingPosition == null)
         {
             _logger.LogWarning("Позиция с Id {PositionId} не найдена.", request.Id);
-            return;
+            throw new ApplicationException($"Не найдена позиция с id: {request.Id}");
         }
 
         // Обновление свойств позиции
-        existingPosition.Name = request.Name;
-        existingPosition.Quantity = request.Quantity;
-        existingPosition.Value = request.Value;
-        existingPosition.Invoice = request.Invoice;
+        if (!string.IsNullOrEmpty(request.Name))
+            existingPosition.Name = request.Name;
+        
+        if (!string.IsNullOrEmpty(request.Number))
+            existingPosition.Number = request.Number;
+        
+        if (request.Value.HasValue)
+            existingPosition.Value = request.Value.Value;
 
         await _dbContext.SaveChangesAsync(ct);
 
         _logger.LogInformation("Позиция успешно обновлена: {@Position}", existingPosition);
+
+        return existingPosition;
+    }
+    
+    public async Task<Position> GetPositionAsync(int id)
+    {
+        return await _dbContext.Positions.FirstAsync(p => p.Id == id);
+    }
+
+    public async Task DeletePositionAsync(int id, CancellationToken cancellationToken)
+    {
+        var existingPosition = await _dbContext.Positions.FindAsync(id);
+
+        if (existingPosition == null)
+        {
+            _logger.LogWarning("Позиция с Id {PositionId} не найдена.", id);
+            return;
+        }
+
+        _dbContext.Positions.Remove(existingPosition);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Позиция успешно удалена: {@Position}", existingPosition);
+    }
+
+    public async Task<Position[]> GetPositionsByInvoiceIdAsync(int invoiceId)
+    {
+        return await _dbContext.Positions
+            .Include(p => p.Invoice)
+            .Where(p => p.Invoice.Id == invoiceId)
+            .ToArrayAsync();
     }
 }

@@ -13,16 +13,16 @@ namespace Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "DocumentMasterDetail");
+                name: "documentMasterDetail");
 
             migrationBuilder.CreateTable(
                 name: "ErrorLogs",
-                schema: "DocumentMasterDetail",
+                schema: "documentMasterDetail",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     Note = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -32,15 +32,14 @@ namespace Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Invoices",
-                schema: "DocumentMasterDetail",
+                schema: "documentMasterDetail",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Number = table.Column<string>(type: "text", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    Note = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                    Date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    Note = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,13 +48,13 @@ namespace Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Positions",
-                schema: "DocumentMasterDetail",
+                schema: "documentMasterDetail",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Number = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Quantity = table.Column<decimal>(type: "numeric", nullable: false),
                     Value = table.Column<decimal>(type: "numeric", nullable: false),
                     InvoiceId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -65,7 +64,7 @@ namespace Data.Migrations
                     table.ForeignKey(
                         name: "FK_Positions_Invoices_InvoiceId",
                         column: x => x.InvoiceId,
-                        principalSchema: "DocumentMasterDetail",
+                        principalSchema: "documentMasterDetail",
                         principalTable: "Invoices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -73,14 +72,14 @@ namespace Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_Number",
-                schema: "DocumentMasterDetail",
+                schema: "documentMasterDetail",
                 table: "Invoices",
                 column: "Number",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Positions_InvoiceId",
-                schema: "DocumentMasterDetail",
+                schema: "documentMasterDetail",
                 table: "Positions",
                 column: "InvoiceId");
         }
@@ -90,15 +89,15 @@ namespace Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ErrorLogs",
-                schema: "DocumentMasterDetail");
+                schema: "documentMasterDetail");
 
             migrationBuilder.DropTable(
                 name: "Positions",
-                schema: "DocumentMasterDetail");
+                schema: "documentMasterDetail");
 
             migrationBuilder.DropTable(
                 name: "Invoices",
-                schema: "DocumentMasterDetail");
+                schema: "documentMasterDetail");
         }
     }
 }

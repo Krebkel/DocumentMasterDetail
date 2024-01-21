@@ -31,4 +31,23 @@
         <ProjectReference Include="..\Positions\Positions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\index.html" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\modules\invoices.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\positions.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\utils.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\AddModule.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\DeleteModule.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\GetModule.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\UpdateModule.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\modules\UtilsModule.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\libs\" />
+    </ItemGroup>
+
 </Project>

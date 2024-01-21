@@ -1,6 +1,7 @@
 using Data;
 using ErrorLogs;
 using Invoices;
+using Microsoft.EntityFrameworkCore;
 using Positions;
 using Microsoft.Net.Http.Headers;
 
@@ -11,10 +12,7 @@ builder.Services
 
 builder.Services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen(setup =>
-    {
-        // Swagger
-    });
+    .AddSwaggerGen();
 
 builder.Services
     .Configure<DataOptions>(builder.Configuration.GetSection("Postgres"));
@@ -36,11 +34,15 @@ builder.Services.AddHealthChecks();
 var app = builder.Build();
 
 // Swagger UI и HealthChecks
-
-
-app.UseEndpoints(e => e.MapControllers());
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 // Swagger UI
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseDefaultFiles()
     .UseStaticFiles(new StaticFileOptions
@@ -52,4 +54,14 @@ app.UseDefaultFiles()
         }
     });
 
+InitializeDatabase(app);
 app.Run();
+
+void InitializeDatabase(IApplicationBuilder application)
+{
+    using var scope = application.ApplicationServices
+        .GetRequiredService<IServiceScopeFactory>()
+        .CreateScope();
+    
+    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+}

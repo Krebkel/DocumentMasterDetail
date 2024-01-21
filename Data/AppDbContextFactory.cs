@@ -16,7 +16,7 @@ internal class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
         {
             ConnectionString =
                 "Host=***;Port=5432;Database=***;Username=***;Password=***;Pooling=true;Maximum Pool Size=10",
-            ServiceSchema = "DocumentMasterDetail"
+            ServiceSchema = "documentMasterDetail"
         });
 
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();

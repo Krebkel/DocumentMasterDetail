@@ -6,22 +6,22 @@ namespace Contracts;
 public class Position : DatabaseEntity
 {
     /// <summary>
-    /// Наименование
+    /// Номер
     /// </summary>
-    public string? Name { get; set; }
+    public required string Number { get; set; }
 
     /// <summary>
-    /// Количество
+    /// Наименование
     /// </summary>
-    public decimal? Quantity { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Сумма
     /// </summary>
-    public decimal? Value { get; set; }
+    public required decimal Value { get; set; }
 
     /// <summary>
     /// Документ
     /// </summary>
-    public Invoice? Invoice { get; set; }
+    public required Invoice Invoice { get; set; }
 }

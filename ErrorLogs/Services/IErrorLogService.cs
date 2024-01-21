@@ -10,11 +10,10 @@ public interface IErrorLogService
     /// <summary>
     /// Создать лог ошибки
     /// </summary>
-    Task<ErrorLog> CreateErrorLogAsync(CreateErrorLogRequest errorLog, CancellationToken cancellationToken);
+    Task<ErrorLog> CreateErrorLogAsync(CreateErrorLogRequest errorLog, CancellationToken cancellationToken = default);
 }
 
 public class CreateErrorLogRequest
 {
-    public DateTime? Date { get; set; }
     public string? Note { get; set; }
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240114030908_Initial")]
+    [Migration("20240121115139_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("DocumentMasterDetail")
+                .HasDefaultSchema("documentMasterDetail")
                 .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -34,7 +34,7 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTimeOffset>("Date")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Note")
@@ -43,7 +43,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ErrorLogs", "DocumentMasterDetail");
+                    b.ToTable("ErrorLogs", "documentMasterDetail");
                 });
 
             modelBuilder.Entity("Contracts.Invoice", b =>
@@ -54,11 +54,10 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTimeOffset>("Date")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
@@ -66,15 +65,12 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("numeric");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Number")
                         .IsUnique();
 
-                    b.ToTable("Invoices", "DocumentMasterDetail");
+                    b.ToTable("Invoices", "documentMasterDetail");
                 });
 
             modelBuilder.Entity("Contracts.Position", b =>
@@ -92,8 +88,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("numeric");
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Value")
                         .HasColumnType("numeric");
@@ -102,23 +99,18 @@ namespace Data.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.ToTable("Positions", "DocumentMasterDetail");
+                    b.ToTable("Positions", "documentMasterDetail");
                 });
 
             modelBuilder.Entity("Contracts.Position", b =>
                 {
                     b.HasOne("Contracts.Invoice", "Invoice")
-                        .WithMany("Positions")
+                        .WithMany()
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Invoice");
-                });
-
-            modelBuilder.Entity("Contracts.Invoice", b =>
-                {
-                    b.Navigation("Positions");
                 });
 #pragma warning restore 612, 618
         }

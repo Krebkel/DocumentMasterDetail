@@ -10,7 +10,7 @@ public class ErrorLog : DatabaseEntity
     /// <summary>
     /// Время ошибки
     /// </summary>
-    public DateTime? Date { get; set; }
+    public DateTimeOffset Date { get; set; }
 
     /// <summary>
     /// Примечание

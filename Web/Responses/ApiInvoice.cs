@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
+namespace Web.Responses;
 
-namespace Contracts;
-
-/// <summary>
-/// Документ Master
-/// </summary>
-public class Invoice : DatabaseEntity
+public class ApiInvoice
 {
+    /// <summary>
+    /// Идентификатор
+    /// </summary>
+    public int Id { get; set; }
+    
     /// <summary>
     /// Номер документа
     /// </summary>
@@ -22,4 +21,9 @@ public class Invoice : DatabaseEntity
     /// Примечание
     /// </summary>
     public string? Note { get; set; }
+    
+    /// <summary>
+    /// Сумма
+    /// </summary>
+    public decimal Sum { get; set; }
 }

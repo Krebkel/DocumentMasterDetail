@@ -11,11 +11,11 @@ internal class PositionConfiguration : IEntityTypeConfiguration<Position>
         builder.HasKey(position => position.Id);
 
         builder.Property(position => position.Name).IsRequired();
-        builder.Property(position => position.Quantity).IsRequired();
+        builder.Property(position => position.Number).IsRequired();
         builder.Property(position => position.Value).IsRequired();
 
         builder.HasOne(position => position.Invoice)
-            .WithMany(invoice => invoice.Positions)
+            .WithMany()
             .IsRequired();
     }
 }
