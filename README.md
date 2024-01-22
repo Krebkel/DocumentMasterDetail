@@ -93,8 +93,6 @@ https://docs.docker.com/docker-for-windows/install
 
 ## Установка сервиса
 
-### Подготовка
-
 1. Скачайте архив проекта из репозитория GitHub. Для этого в репозитории необходимо нажать зелёную кнопку `<> Code` и в появившемся меню нажать `Download ZIP`.
 https://github.com/Krebkel/DocumentMasterDetail
 
