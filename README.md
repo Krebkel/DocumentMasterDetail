@@ -13,18 +13,23 @@ Colima является бесплатной альтернативой Docker D
 
 3. Таким же образом установите сам Docker и Colima:
 >`brew install docker`
+
 >`brew install docker-compose`
+
 >`brew install --HEAD colima`
 
 4. После установки запустите виртуальную машину:
+
 *Для процессоров Apple Silicon (M1/M2/ARM), Lima >=0.14, MacOS >=13.0:*
 >`colima start --arch aarch64 --vm-type=vz --vz-rosetta`
+
 *Для процессоров Intel:*
 >`colima start --vm-type=vz` (последний аргумент для Lima>=0.14, MacOS >= 13.0)
 
 5. Убедитесь, что Colima запущена:
 >`colima status`
-INFO[0000] colima is running using macOS Virtualization.Framework
+
+> INFO[0000] colima is running using macOS Virtualization.Framework
 <...>
 
 6. Откройте командную строку и выполните команду:
@@ -32,10 +37,7 @@ INFO[0000] colima is running using macOS Virtualization.Framework
 
 Если отобразится версия Docker, это означает, что установка Docker прошла успешно.
 
-7. Через терминал создайте хранилище для контейнеров:
-> `docker volume create pgdata`
-
-8. Теперь можно использовать Docker.
+7. Теперь можно использовать Docker.
 
 ### Для Astra Linux
 
@@ -53,10 +55,7 @@ INFO[0000] colima is running using macOS Virtualization.Framework
 
 Если отобразится версия Docker, это означает, что установка Docker прошла успешно.
 
-4. Через терминал создайте хранилище для контейнеров:
-> `docker volume create pgdata`
-
-5. Теперь можно использовать Docker.
+4. Теперь можно использовать Docker.
 
 ### Для Windows
 
@@ -90,10 +89,7 @@ https://docs.docker.com/docker-for-windows/install
 
 Если отобразится версия docker, это означает, что установка docker в Windows прошла успешно.
 
-8. Через терминал создайте хранилище для контейнеров:
-> `docker volume create pgdata`
-
-9. Теперь можно использовать Docker.
+8. Теперь можно использовать Docker.
 
 ## Установка сервиса
 
@@ -104,9 +100,12 @@ https://github.com/Krebkel/DocumentMasterDetail
 
 2. Разархивируйте скачанный архив проекта.
 
-3. Откройте в терминале директорию с проектом `DocumentMasterDetail-master`, в которой лежит файл `Dockerfile`. Все следующие команды необходимо выполнять из этой директории - корня проекта.
+3. В терминале выполните следующую команду для создания хранилища контейнеров:
+> `docker volume create pgdata`
 
-4. В терминале необходимо сбилдить проект командой:
+4. Откройте в терминале директорию с проектом `DocumentMasterDetail-master`, в которой лежит файл `Dockerfile`. Все следующие команды необходимо выполнять из этой директории - корня проекта.
+
+5. В терминале необходимо сбилдить проект командой:
 > `docker build -t document .`
 
 Обратите внимание, что в конце команды есть точка. 
@@ -121,7 +120,8 @@ https://github.com/Krebkel/DocumentMasterDetail
 
 Должны появиться строки в виде таблицы, в которой в столбце IMAGE есть следующие записи:
 >document:latest
-postgres:13
+
+>postgres:13
 
 7. Сервис готов к работе.
 
